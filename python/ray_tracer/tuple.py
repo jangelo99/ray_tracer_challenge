@@ -9,6 +9,12 @@ def float_equal(a, b):
   else:
     return False
 
+class TupleException(Exception):
+  pass
+  
+class InvalidOperationError(TupleException):
+  pass
+
 class Tuple(ABC):
   def __init__(self, x, y, z):
     self.x = x
@@ -25,6 +31,10 @@ class Tuple(ABC):
       return False
 
   @abstractmethod
+  def add(self, tup):
+    pass
+
+  @abstractmethod
   def is_point(self):
     pass
 
@@ -37,6 +47,12 @@ class Point(Tuple):
   def __init__(self, x, y, z):
     super().__init__(x, y, z)
     self.w = 1.0
+    
+  def add(self, tup):
+    if tup.w == 1.0:
+      raise InvalidOperationError("Can't add a Point to another Point")
+    else:
+      return Point(self.x + tup.x, self.y + tup.y, self.z + tup.z)
 
   def is_point(self):
     return True
@@ -49,6 +65,12 @@ class Vector(Tuple):
   def __init__(self, x, y, z):
     super().__init__(x, y, z)
     self.w = 0.0
+    
+  def add(self, tup):
+    if tup.w == 1.0:
+      return Point(self.x + tup.x, self.y + tup.y, self.z + tup.z)
+    else:
+      return Vector(self.x + tup.x, self.y + tup.y, self.z + tup.z)
 
   def is_point(self):
     return False
