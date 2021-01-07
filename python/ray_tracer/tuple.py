@@ -30,6 +30,19 @@ class Tuple(ABC):
     else:
       return False
 
+  def scalar_multiply(self, scalar):
+    self.x *= scalar
+    self.y *= scalar
+    self.z *= scalar
+
+  def scalar_divide(self, scalar):
+    self.x /= scalar
+    self.y /= scalar
+    self.z /= scalar
+  
+  def negate(self):
+    self.scalar_multiply(-1.0)
+
   @abstractmethod
   def add(self, tup):
     pass

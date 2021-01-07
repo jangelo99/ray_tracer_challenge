@@ -72,5 +72,23 @@ class TupleTestCase(unittest.TestCase):
     with self.assertRaises(InvalidOperationError):
       result = v1.subtract(p2)
 
+  def test_scalar_multiply(self):
+    v1 = Vector(1, -2, 3)
+    v1.scalar_multiply(3.5)
+    self.assertTrue(v1.equals(Vector(3.5, -7.0, 10.5)))
+    v2 = Vector(1, -2, 3)
+    v2.scalar_multiply(0.5)
+    self.assertTrue(v2.equals(Vector(0.5, -1.0, 1.5)))
+
+  def test_scalar_divide(self):
+    v1 = Vector(1, -2, 3)
+    v1.scalar_divide(2.0)
+    self.assertTrue(v1.equals(Vector(0.5, -1.0, 1.5)))
+
+  def test_negate(self):
+    v1 = Vector(1, -2, 3)
+    v1.negate()
+    self.assertTrue(v1.equals(Vector(-1, 2, -3)))
+
 if __name__ == '__main__':
     unittest.main()
