@@ -35,6 +35,10 @@ class Tuple(ABC):
     pass
 
   @abstractmethod
+  def subtract(self, tup):
+    pass
+
+  @abstractmethod
   def is_point(self):
     pass
 
@@ -49,10 +53,16 @@ class Point(Tuple):
     self.w = 1.0
     
   def add(self, tup):
-    if tup.w == 1.0:
+    if tup.is_point():
       raise InvalidOperationError("Can't add a Point to another Point")
     else:
       return Point(self.x + tup.x, self.y + tup.y, self.z + tup.z)
+      
+  def subtract(self, tup):
+    if tup.is_point():
+      return Vector(self.x - tup.x, self.y - tup.y, self.z - tup.z)
+    else:
+      return Point(self.x - tup.x, self.y - tup.y, self.z - tup.z)
 
   def is_point(self):
     return True
@@ -67,10 +77,16 @@ class Vector(Tuple):
     self.w = 0.0
     
   def add(self, tup):
-    if tup.w == 1.0:
+    if tup.is_point():
       return Point(self.x + tup.x, self.y + tup.y, self.z + tup.z)
     else:
       return Vector(self.x + tup.x, self.y + tup.y, self.z + tup.z)
+
+  def subtract(self, tup):
+    if tup.is_point():
+      raise InvalidOperationError("Can't subtract a Point from a Vector")
+    else:
+      return Vector(self.x - tup.x, self.y - tup.y, self.z - tup.z)
 
   def is_point(self):
     return False

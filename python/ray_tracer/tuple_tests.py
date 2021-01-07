@@ -25,6 +25,11 @@ class TupleTestCase(unittest.TestCase):
     self.assertEqual(self.vec_a.w, 0.0)
     self.assertFalse(self.vec_a.is_point())
     self.assertTrue(self.vec_a.is_vector())
+
+  def test_equals(self):
+    self.assertTrue(self.pt_a.equals(Point(4.3, -4.2, 3.1)))
+    self.assertTrue(self.vec_a.equals(Vector(4.3, -4.2, 3.1)))
+    self.assertFalse(self.pt_a.equals(self.vec_a))
     
   def test_add(self):
     # adding 2 vectors produces a vector
@@ -49,10 +54,23 @@ class TupleTestCase(unittest.TestCase):
     with self.assertRaises(InvalidOperationError):
       add_pts = self.pt_a.add(self.pt_b)
   
-  def test_equals(self):
-    self.assertTrue(self.pt_a.equals(Point(4.3, -4.2, 3.1)))
-    self.assertTrue(self.vec_a.equals(Vector(4.3, -4.2, 3.1)))
-    self.assertFalse(self.pt_a.equals(self.vec_a))
+  def test_subtract(self):
+    # subtracting a vector from a vector produces a vector
+    v1 = Vector(3, 2, 1)
+    v2 = Vector(5, 6, 7)
+    result = v1.subtract(v2)
+    self.assertTrue(result.equals(Vector(-2, -4, -6)))
+    # subtracting a point from a point produces a vector
+    p1 = Point(3, 2, 1)
+    p2 = Point(5, 6, 7)
+    result = p1.subtract(p2)
+    self.assertTrue(result.equals(Vector(-2, -4, -6)))
+    # subtracting a vector from a point produces a point
+    result = p1.subtract(v2)
+    self.assertTrue(result.equals(Point(-2, -4, -6)))
+    # subtracting a point from a vector raises an exception
+    with self.assertRaises(InvalidOperationError):
+      result = v1.subtract(p2)
 
 if __name__ == '__main__':
     unittest.main()
