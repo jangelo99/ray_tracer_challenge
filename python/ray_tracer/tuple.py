@@ -16,11 +16,11 @@ class InvalidOperationError(TupleException):
   pass
 
 class Tuple(ABC):
-  def __init__(self, x, y, z):
+  def __init__(self, x, y, z, w):
     self.x = x
     self.y = y
     self.z = z
-    self.w = 1.0
+    self.w = w
     super().__init__()
     
   def equals(self, tup):
@@ -30,18 +30,11 @@ class Tuple(ABC):
     else:
       return False
 
-  def scalar_multiply(self, scalar):
-    self.x *= scalar
-    self.y *= scalar
-    self.z *= scalar
+  def is_point(self):
+    return self.w == 1.0
 
-  def scalar_divide(self, scalar):
-    self.x /= scalar
-    self.y /= scalar
-    self.z /= scalar
-  
-  def negate(self):
-    self.scalar_multiply(-1.0)
+  def is_vector(self):
+    return self.w == 0.0
 
   @abstractmethod
   def add(self, tup):
@@ -51,19 +44,10 @@ class Tuple(ABC):
   def subtract(self, tup):
     pass
 
-  @abstractmethod
-  def is_point(self):
-    pass
-
-  @abstractmethod
-  def is_vector(self):
-    pass
-
 
 class Point(Tuple):
   def __init__(self, x, y, z):
-    super().__init__(x, y, z)
-    self.w = 1.0
+    super().__init__(x, y, z, 1.0)
     
   def add(self, tup):
     if tup.is_point():
@@ -77,17 +61,10 @@ class Point(Tuple):
     else:
       return Point(self.x - tup.x, self.y - tup.y, self.z - tup.z)
 
-  def is_point(self):
-    return True
-
-  def is_vector(self):
-    return False
-
 
 class Vector(Tuple):
   def __init__(self, x, y, z):
-    super().__init__(x, y, z)
-    self.w = 0.0
+    super().__init__(x, y, z, 0.0)
     
   def add(self, tup):
     if tup.is_point():
@@ -101,9 +78,11 @@ class Vector(Tuple):
     else:
       return Vector(self.x - tup.x, self.y - tup.y, self.z - tup.z)
 
-  def is_point(self):
-    return False
+  def scalar_multiply(self, scalar):
+    return Vector(self.x * scalar, self.y * scalar, self.z * scalar)
 
-  def is_vector(self):
-    return True
+  def scalar_divide(self, scalar):
+    return Vector(self.x / scalar, self.y / scalar, self.z / scalar)
 
+  def negate(self):
+    return self.scalar_multiply(-1.0)
