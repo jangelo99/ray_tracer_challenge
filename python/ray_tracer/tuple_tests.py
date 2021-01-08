@@ -1,3 +1,4 @@
+import math
 import unittest
 
 from tuple import Point, Vector, InvalidOperationError
@@ -89,6 +90,37 @@ class TupleTestCase(unittest.TestCase):
     v1 = Vector(1, -2, 3)
     result = v1.negate()
     self.assertTrue(result.equals(Vector(-1, 2, -3)))
+
+  def test_magnitude(self):
+    v1 = Vector(0, 1, 0)
+    v2 = Vector(1, 2, 3)
+    v3 = Vector(-1, -2, -3)
+    self.assertEqual(v1.magnitude(), 1.0)
+    self.assertEqual(v2.magnitude(), math.sqrt(14))
+    self.assertEqual(v3.magnitude(), math.sqrt(14))
+
+  def test_normalize(self):
+    v1 = Vector(0, 4, 0)
+    result = v1.normalize()
+    self.assertEqual(result.magnitude(), 1.0)
+    self.assertTrue(result.equals(Vector(0, 1, 0)))
+    v2 = Vector(1, 2, 3)
+    result = v2.normalize()
+    self.assertEqual(result.magnitude(), 1.0)
+    self.assertTrue(result.equals(Vector(1.0/math.sqrt(14), 2.0/math.sqrt(14), 3.0/math.sqrt(14))))
+
+  def test_dot_product(self):
+    v1 = Vector(1, 2, 3)
+    v2 = Vector(2, 3, 4)
+    self.assertEqual(v1.dot(v2), 20.0)
+
+  def test_cross_product(self):
+    v1 = Vector(1, 2, 3)
+    v2 = Vector(2, 3, 4)
+    result = v1.cross(v2)
+    self.assertTrue(result.equals(Vector(-1, 2, -1)))
+    result = v2.cross(v1)
+    self.assertTrue(result.equals(Vector(1, -2, 1)))
 
 if __name__ == '__main__':
     unittest.main()

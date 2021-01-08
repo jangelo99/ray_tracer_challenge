@@ -1,4 +1,6 @@
 
+import math
+
 from abc import ABC, abstractmethod
 
 EPSILON = 0.00001
@@ -86,3 +88,21 @@ class Vector(Tuple):
 
   def negate(self):
     return self.scalar_multiply(-1.0)
+
+  def magnitude(self):
+    return math.sqrt(self.x**2 + self.y**2 + self.z**2)
+
+  def normalize(self):
+    if self.equals(Vector(0.0, 0.0, 0.0)):
+      raise InvalidOperationError("Can't normalize a zero Vector")
+    else:
+      return self.scalar_divide(self.magnitude())
+
+  def dot(self, vec):
+    return (self.x * vec.x) + (self.y * vec.y) + (self.z * vec.z)
+
+  def cross(self, vec):
+    x = (self.y * vec.z) - (self.z * vec.y)
+    y = (self.z * vec.x) - (self.x * vec.z)
+    z = (self.x * vec.y) - (self.y * vec.x)
+    return Vector(x, y, z)
