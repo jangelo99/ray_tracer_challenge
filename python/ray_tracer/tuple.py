@@ -93,8 +93,8 @@ class Vector(Tuple):
     return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 
   def normalize(self):
-    if self.equals(Vector(0.0, 0.0, 0.0)):
-      raise InvalidOperationError("Can't normalize a zero Vector")
+    if float_equal(self.magnitude(), 0.0):
+      raise InvalidOperationError("Can't normalize a Vector with zero magnitude")
     else:
       return self.scalar_divide(self.magnitude())
 

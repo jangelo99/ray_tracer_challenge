@@ -108,6 +108,9 @@ class TupleTestCase(unittest.TestCase):
     result = v2.normalize()
     self.assertEqual(result.magnitude(), 1.0)
     self.assertTrue(result.equals(Vector(1.0/math.sqrt(14), 2.0/math.sqrt(14), 3.0/math.sqrt(14))))
+    v3 = Vector(0, 0, 0)
+    with self.assertRaises(InvalidOperationError):
+      result = v3.normalize()
 
   def test_dot_product(self):
     v1 = Vector(1, 2, 3)
