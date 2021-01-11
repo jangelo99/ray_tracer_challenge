@@ -2,14 +2,7 @@
 import math
 
 from abc import ABC, abstractmethod
-
-EPSILON = 0.00001
-
-def float_equal(a, b):
-  if abs(a - b) < EPSILON:
-    return True
-  else:
-    return False
+from utils import EPSILON, float_equal
 
 class TupleException(Exception):
   pass
