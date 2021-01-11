@@ -2,7 +2,6 @@ import unittest
 
 from canvas import Color
 
-
 class CanvasTestCase(unittest.TestCase):
 
   def setUp(self):

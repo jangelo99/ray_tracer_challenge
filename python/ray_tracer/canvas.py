@@ -1,5 +1,5 @@
 
-from utils import EPSILON, float_equal
+from utils import float_equal
 
 
 class Color:

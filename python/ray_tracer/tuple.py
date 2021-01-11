@@ -2,13 +2,16 @@
 import math
 
 from abc import ABC, abstractmethod
-from utils import EPSILON, float_equal
+from utils import float_equal
+
 
 class TupleException(Exception):
   pass
+
   
 class InvalidOperationError(TupleException):
   pass
+
 
 class Tuple(ABC):
   def __init__(self, x, y, z, w):
