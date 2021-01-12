@@ -40,3 +40,35 @@ class CanvasTestCase(unittest.TestCase):
     red = Color(1.0, 0.0, 0.0)
     self.canvas.write_pixel(2, 3, red)
     self.assertTrue(self.canvas.pixel_at(2, 3).equals(red))
+
+  def test_canvas_to_ppm(self):
+    c = Canvas(5, 3)
+    c1 = Color(1.5, 0.0, 0.0)
+    c2 = Color(0.0, 0.5, 0.0)
+    c3 = Color(-0.5, 0.0, 1.0)
+    c.write_pixel(0, 0, c1)
+    c.write_pixel(2, 1, c2)
+    c.write_pixel(4, 2, c3)
+    ppm_name = "canvas.ppm"
+    c.to_ppm(ppm_name)
+    with open(ppm_name) as f:
+      self.assertEqual(f.readline(), "P3\n")
+      self.assertEqual(f.readline(), "5 3\n")
+      self.assertEqual(f.readline(), "255\n")
+
+  def test_canvas_to_ppm_split_lines(self):
+    c = Canvas(10, 2, Color(1.0, 0.8, 0.6))
+    ppm_name = "canvas.ppm"
+    c.to_ppm(ppm_name)
+    line1 = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204\n"
+    line2 = "153 255 204 153 255 204 153 255 204 153 255 204 153\n"
+    with open(ppm_name) as f:
+      # skip header lines
+      f.readline()
+      f.readline()
+      f.readline()
+      # read data lines
+      self.assertEqual(f.readline(), line1)
+      self.assertEqual(f.readline(), line2)
+      self.assertEqual(f.readline(), line1)
+      self.assertEqual(f.readline(), line2)
