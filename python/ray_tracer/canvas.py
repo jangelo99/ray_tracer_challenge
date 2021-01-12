@@ -28,3 +28,19 @@ class Color:
   def hadamard_product(self, color):
     return Color(self.r * color.r, self.g * color.g, self.b * color.b)
 
+
+class Canvas:
+
+  def __init__(self, width, height):
+    self.width = width
+    self.height = height
+    c = Color(0.0, 0.0, 0.0)
+    self.pixels = [None] * self.height
+    for i in range(self.height):
+      self.pixels[i] = [c] * width
+
+  def pixel_at(self, x, y):
+    return self.pixels[y][x]
+
+  def write_pixel(self, x, y, color):
+    self.pixels[y][x] = color
