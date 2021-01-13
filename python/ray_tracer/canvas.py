@@ -44,7 +44,11 @@ class Canvas:
     return self.pixels[y][x]
 
   def write_pixel(self, x, y, color):
-    self.pixels[y][x] = color
+    if (x > 0 and x < self.width) and (y > 0 and y < self.height):
+      self.pixels[y][x] = color
+      return True
+    else:
+      return False
 
   def to_ppm(self, ppm_name):
     with open(ppm_name, 'w') as f:

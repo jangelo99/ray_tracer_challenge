@@ -1,4 +1,5 @@
 
+from canvas import Canvas, Color
 from tuple import Point, Vector
 
 class Projectile():
@@ -26,6 +27,16 @@ if __name__ == '__main__':
   wind = Vector(-0.01, 0, 0)
   e = Environment(gravity, wind)
   
+  canvas = Canvas(900, 550)
+  red = Color(1, 0, 0)
+  canvas.write_pixel(start.x, canvas.height - start.y, red)
+
   while p.position.y > 0:
     p = tick(e, p)
-    print("x=" + str(p.position.x) + ", y=" + str(p.position.y))
+    x = round(p.position.x)
+    y = canvas.height - round(p.position.y)
+    canvas.write_pixel(x, y, red)
+    print("x=" + str(x) + ", y=" + str(y))
+
+  print("Writing canvas to PPM file...")
+  canvas.to_ppm("canvas.ppm")
