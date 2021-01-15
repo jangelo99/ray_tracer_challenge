@@ -24,3 +24,12 @@ class Matrix:
         return Point(result[0], result[1], result[2])
       else:
         return Vector(result[0], result[1], result[2])
+
+  def transpose(self):
+    return Matrix(self.data.transpose())
+
+
+class Identity_Matrix(Matrix):
+
+  def __init__(self, n):
+    self.data = np.identity(n)

@@ -1,6 +1,6 @@
 import unittest
 
-from matrix import Matrix
+from matrix import Matrix, Identity_Matrix
 from tuple import Point, Vector
 
 class MatrixTestCase(unittest.TestCase):
@@ -42,3 +42,25 @@ class MatrixTestCase(unittest.TestCase):
     d = Vector(1, 2, 3)
     result = C * d
     self.assertTrue(result.equals(Vector(14, 22, 32)))
+
+  def test_identity_matrix(self):
+    I = Identity_Matrix(4)
+    self.assertEqual(I, Matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]))
+    A = Matrix([[1, 2, 3, 4], [5, 6, 7, 8], [9, 8, 7, 6], [5, 4, 3, 2]])
+    result = A * I
+    self.assertEqual(result, A)
+    b = Point(1, 2, 3)
+    result = I * b
+    self.assertTrue(result.equals(Point(1, 2, 3)))
+    c = Vector(4, 5, 6)
+    result = I * c
+    self.assertTrue(result.equals(Vector(4, 5, 6)))
+
+  def test_matrix_transpose(self):
+    A = Matrix([[0, 9, 3, 0], [9, 8, 0, 8], [1, 8, 5, 3], [0, 0, 5, 8]])
+    A_transpose = Matrix([[0, 9, 1, 0], [9, 8, 8, 0], [3, 0, 5, 5], [0, 8, 3, 8]])
+    result = A.transpose()
+    self.assertEqual(result, A_transpose)
+    I = Identity_Matrix(4)
+    result = I.transpose()
+    self.assertEqual(result, Identity_Matrix(4))
