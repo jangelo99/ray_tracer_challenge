@@ -1,6 +1,7 @@
 import numpy as np
 
 from tuple import Tuple, Point, Vector
+from utils import EPSILON
 
 
 class Matrix:
@@ -12,7 +13,7 @@ class Matrix:
     return self.data[key[0], key[1]]
 
   def __eq__(self, matrix):
-    return np.array_equal(self.data, matrix.data)
+    return np.allclose(self.data, matrix.data, atol=EPSILON, rtol=0.0)
 
   def __mul__(self, other):
     if isinstance(other, Matrix):
@@ -27,6 +28,12 @@ class Matrix:
 
   def transpose(self):
     return Matrix(self.data.transpose())
+
+  def determinant(self):
+    return round(np.linalg.det(self.data), 5)
+
+  def inverse(self):
+    return Matrix(np.linalg.inv(self.data))
 
 
 class Identity_Matrix(Matrix):
