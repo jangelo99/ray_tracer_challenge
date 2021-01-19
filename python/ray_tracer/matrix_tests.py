@@ -1,6 +1,6 @@
 import unittest
 
-from matrix import Matrix, Identity_Matrix
+from matrix import Matrix, Identity_Matrix, Translation
 from tuple import Point, Vector
 
 class MatrixTestCase(unittest.TestCase):
@@ -78,3 +78,15 @@ class MatrixTestCase(unittest.TestCase):
     self.assertTrue(result == A_inv)
     result = A * A.inverse()
     self.assertEqual(result, Identity_Matrix(4))
+
+  def test_translation_matrix(self):
+    T = Translation(5, -3, 2)
+    p = Point(-3, 4, 5)
+    result = T * p
+    self.assertTrue(result.equals(Point(2, 1, 7)))
+    T_inv = T.inverse()
+    result = T_inv * p
+    self.assertTrue(result.equals(Point(-8, 7, 3)))
+    v = Vector(-3, 4, 5)
+    result = T * v
+    self.assertTrue(result.equals(v))

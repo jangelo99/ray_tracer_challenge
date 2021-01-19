@@ -12,6 +12,9 @@ class Matrix:
   def __getitem__(self, key):
     return self.data[key[0], key[1]]
 
+  def __setitem__(self, key, value):
+    self.data[key[0], key[1]] = value
+
   def __eq__(self, matrix):
     return np.allclose(self.data, matrix.data, atol=EPSILON, rtol=0.0)
 
@@ -40,3 +43,12 @@ class Identity_Matrix(Matrix):
 
   def __init__(self, n):
     self.data = np.identity(n)
+
+
+class Translation(Identity_Matrix):
+
+  def __init__(self, x, y, z):
+    super().__init__(4)
+    self[0, 3] = x
+    self[1, 3] = y
+    self[2, 3] = z
