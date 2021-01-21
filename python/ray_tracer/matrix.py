@@ -45,10 +45,19 @@ class Identity_Matrix(Matrix):
     self.data = np.identity(n)
 
 
-class Translation(Identity_Matrix):
+class Translation_Matrix(Identity_Matrix):
 
   def __init__(self, x, y, z):
     super().__init__(4)
     self[0, 3] = x
     self[1, 3] = y
     self[2, 3] = z
+
+
+class Scaling_Matrix(Identity_Matrix):
+
+  def __init__(self, x, y, z):
+    super().__init__(4)
+    self[0, 0] = x
+    self[1, 1] = y
+    self[2, 2] = z

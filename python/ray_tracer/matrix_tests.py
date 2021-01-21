@@ -1,6 +1,6 @@
 import unittest
 
-from matrix import Matrix, Identity_Matrix, Translation
+from matrix import Matrix, Identity_Matrix, Translation_Matrix, Scaling_Matrix
 from tuple import Point, Vector
 
 class MatrixTestCase(unittest.TestCase):
@@ -80,7 +80,7 @@ class MatrixTestCase(unittest.TestCase):
     self.assertEqual(result, Identity_Matrix(4))
 
   def test_translation_matrix(self):
-    T = Translation(5, -3, 2)
+    T = Translation_Matrix(5, -3, 2)
     p = Point(-3, 4, 5)
     result = T * p
     self.assertTrue(result.equals(Point(2, 1, 7)))
@@ -90,3 +90,19 @@ class MatrixTestCase(unittest.TestCase):
     v = Vector(-3, 4, 5)
     result = T * v
     self.assertTrue(result.equals(v))
+
+  def test_scaling_matrix(self):
+    T = Scaling_Matrix(2, 3, 4)
+    p = Point(-4, 6, 8)
+    result = T * p
+    self.assertTrue(result.equals(Point(-8, 18, 32)))
+    T_inv = T.inverse()
+    result = T_inv * p
+    self.assertTrue(result.equals(Point(-2, 2, 2)))
+    v = Vector(-4, 6, 8)
+    result = T * v
+    self.assertTrue(result.equals(Vector(-8, 18, 32)))
+    # use scaling matrix for reflection around x-axis
+    T = Scaling_Matrix(-1, 1, 1)
+    result = T * p
+    self.assertTrue(result.equals(Point(4, 6, 8)))
