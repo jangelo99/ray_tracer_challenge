@@ -1,6 +1,7 @@
+import math
 import unittest
 
-from matrix import Matrix, Identity_Matrix, Translation_Matrix, Scaling_Matrix
+from matrix import Matrix, Identity_Matrix, Translation_Matrix, Scaling_Matrix, Rotation_Axis, Rotation_Matrix
 from tuple import Point, Vector
 
 class MatrixTestCase(unittest.TestCase):
@@ -106,3 +107,33 @@ class MatrixTestCase(unittest.TestCase):
     T = Scaling_Matrix(-1, 1, 1)
     result = T * p
     self.assertTrue(result.equals(Point(4, 6, 8)))
+
+  def test_rotation_matrix_x(self):
+    p = Point(0, 1, 0)
+    R = Rotation_Matrix(Rotation_Axis.X, 45)
+    result = R * p
+    self.assertTrue(result.equals(Point(0, math.sqrt(2.0) / 2.0, math.sqrt(2.0) / 2.0)))
+    R_inv = R.inverse()
+    result = R_inv * p
+    self.assertTrue(result.equals(Point(0, math.sqrt(2.0) / 2.0, -1.0 * math.sqrt(2.0) / 2.0)))
+    R = Rotation_Matrix(Rotation_Axis.X, 90)
+    result = R * p
+    self.assertTrue(result.equals(Point(0, 0, 1)))
+
+  def test_rotation_matrix_y(self):
+    p = Point(0, 0, 1)
+    R = Rotation_Matrix(Rotation_Axis.Y, 45)
+    result = R * p
+    self.assertTrue(result.equals(Point(math.sqrt(2.0) / 2.0, 0, math.sqrt(2.0) / 2.0)))
+    R = Rotation_Matrix(Rotation_Axis.Y, 90)
+    result = R * p
+    self.assertTrue(result.equals(Point(1, 0, 0)))
+
+  def test_rotation_matrix_z(self):
+    p = Point(0, 1, 0)
+    R = Rotation_Matrix(Rotation_Axis.Z, 45)
+    result = R * p
+    self.assertTrue(result.equals(Point(-1.0 * math.sqrt(2.0) / 2.0, math.sqrt(2.0) / 2.0, 0)))
+    R = Rotation_Matrix(Rotation_Axis.Z, 90)
+    result = R * p
+    self.assertTrue(result.equals(Point(-1, 0, 0)))

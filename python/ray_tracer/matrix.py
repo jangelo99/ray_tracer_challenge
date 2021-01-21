@@ -1,5 +1,7 @@
+import math
 import numpy as np
 
+from enum import Enum
 from tuple import Tuple, Point, Vector
 from utils import EPSILON
 
@@ -61,3 +63,32 @@ class Scaling_Matrix(Identity_Matrix):
     self[0, 0] = x
     self[1, 1] = y
     self[2, 2] = z
+
+
+class Rotation_Axis(Enum):
+  X = 1
+  Y = 2
+  Z = 3
+
+class Rotation_Matrix(Identity_Matrix):
+
+  def __init__(self, axis, degrees):
+    super().__init__(4)
+    rads = math.radians(degrees)
+    if axis == Rotation_Axis.X:
+      self[1, 1] = math.cos(rads)
+      self[1, 2] = -1.0 * math.sin(rads)
+      self[2, 1] = math.sin(rads)
+      self[2, 2] = math.cos(rads)
+    elif axis == Rotation_Axis.Y:
+      self[0, 0] = math.cos(rads)
+      self[0, 2] = math.sin(rads)
+      self[2, 0] = -1.0 * math.sin(rads)
+      self[2, 2] = math.cos(rads)
+    elif axis == Rotation_Axis.Z:
+      self[0, 0] = math.cos(rads)
+      self[0, 1] = -1.0 * math.sin(rads)
+      self[1, 0] = math.sin(rads)
+      self[1, 1] = math.cos(rads)
+    else:
+      raise TypeError("Invalid Rotation_Axis for rotation matrix")
