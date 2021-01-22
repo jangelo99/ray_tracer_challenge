@@ -92,3 +92,15 @@ class Rotation_Matrix(Identity_Matrix):
       self[1, 1] = math.cos(rads)
     else:
       raise TypeError("Invalid Rotation_Axis for rotation matrix")
+
+
+class Shearing_Matrix(Identity_Matrix):
+
+  def __init__(self, x_y, x_z, y_x, y_z, z_x, z_y):
+    super().__init__(4)
+    self[0, 1] = x_y
+    self[0, 2] = x_z
+    self[1, 0] = y_x
+    self[1, 2] = y_z
+    self[2, 0] = z_x
+    self[2, 1] = z_y

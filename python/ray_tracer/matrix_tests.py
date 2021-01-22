@@ -1,7 +1,7 @@
 import math
 import unittest
 
-from matrix import Matrix, Identity_Matrix, Translation_Matrix, Scaling_Matrix, Rotation_Axis, Rotation_Matrix
+from matrix import Matrix, Identity_Matrix, Translation_Matrix, Scaling_Matrix, Rotation_Axis, Rotation_Matrix, Shearing_Matrix
 from tuple import Point, Vector
 
 class MatrixTestCase(unittest.TestCase):
@@ -137,3 +137,40 @@ class MatrixTestCase(unittest.TestCase):
     R = Rotation_Matrix(Rotation_Axis.Z, 90)
     result = R * p
     self.assertTrue(result.equals(Point(-1, 0, 0)))
+
+  def test_shearing_matrix(self):
+    p = Point(2, 3, 4)
+    T = Shearing_Matrix(1, 0, 0, 0, 0, 0)
+    result = T * p
+    self.assertTrue(result.equals(Point(5, 3, 4)))
+    T = Shearing_Matrix(0, 1, 0, 0, 0, 0)
+    result = T * p
+    self.assertTrue(result.equals(Point(6, 3, 4)))
+    T = Shearing_Matrix(0, 0, 1, 0, 0, 0)
+    result = T * p
+    self.assertTrue(result.equals(Point(2, 5, 4)))
+    T = Shearing_Matrix(0, 0, 0, 1, 0, 0)
+    result = T * p
+    self.assertTrue(result.equals(Point(2, 7, 4)))
+    T = Shearing_Matrix(0, 0, 0, 0, 1, 0)
+    result = T * p
+    self.assertTrue(result.equals(Point(2, 3, 6)))
+    T = Shearing_Matrix(0, 0, 0, 0, 0, 1)
+    result = T * p
+    self.assertTrue(result.equals(Point(2, 3, 7)))
+
+  def test_chaining_transformations(self):
+    p = Point(1, 0, 1)
+    A = Rotation_Matrix(Rotation_Axis.X, 90)
+    B = Scaling_Matrix(5, 5, 5)
+    C = Translation_Matrix(10, 5, 7)
+    p2 = A * p
+    self.assertTrue(p2.equals(Point(1, -1, 0)))
+    p3 = B * p2
+    self.assertTrue(p3.equals(Point(5, -5, 0)))
+    p4 = C * p3
+    self.assertTrue(p4.equals(Point(15, 0, 7)))
+    # chain the transformations
+    T = C * B * A
+    result = T * p
+    self.assertTrue(result.equals(Point(15, 0, 7)))
