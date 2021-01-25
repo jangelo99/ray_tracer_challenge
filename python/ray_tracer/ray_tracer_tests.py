@@ -1,7 +1,8 @@
+import ray_tracer
 import unittest
 
 from primitive import Sphere
-from ray_tracer import Ray
+from ray_tracer import Intersection, Ray
 from tuple import Point, Vector
 
 class RayTracerTestCase(unittest.TestCase):
@@ -42,3 +43,13 @@ class RayTracerTestCase(unittest.TestCase):
     self.assertEqual(len(xs), 2)
     self.assertEqual(xs[0], -6.0)
     self.assertEqual(xs[1], -4.0)
+
+  def test_intersect_function(self):
+    r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    s = Sphere()
+    xs = ray_tracer.intersect(s, r)
+    self.assertEqual(len(xs), 2)
+    self.assertEqual(xs[0].t, 4.0)
+    self.assertEqual(xs[0].shape, s)
+    self.assertEqual(xs[1].t, 6.0)
+    self.assertEqual(xs[1].shape, s)
