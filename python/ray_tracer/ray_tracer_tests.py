@@ -47,7 +47,8 @@ class RayTracerTestCase(unittest.TestCase):
   def test_intersect_function(self):
     r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     s = Sphere()
-    xs = ray_tracer.intersect(s, r)
+    r.intersect(s)
+    xs = r.intersections
     self.assertEqual(len(xs), 2)
     self.assertEqual(xs[0].t, 4.0)
     self.assertEqual(xs[0].shape, s)
