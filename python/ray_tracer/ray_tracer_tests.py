@@ -18,7 +18,7 @@ class RayTracerTestCase(unittest.TestCase):
     p = r.position(2.5)
     self.assertTrue(p.equals(Point(4.5, 3, 4)))
 
-  def test_ray_sphere_intersect(self):
+  def test_sphere_intersect(self):
     r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     s = Sphere()
     xs = s.intersect(r)
@@ -44,7 +44,7 @@ class RayTracerTestCase(unittest.TestCase):
     self.assertEqual(xs[0], -6.0)
     self.assertEqual(xs[1], -4.0)
 
-  def test_intersect_function(self):
+  def test_ray_intersect(self):
     r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     s = Sphere()
     r.intersect(s)
@@ -54,3 +54,22 @@ class RayTracerTestCase(unittest.TestCase):
     self.assertEqual(xs[0].shape, s)
     self.assertEqual(xs[1].t, 6.0)
     self.assertEqual(xs[1].shape, s)
+
+  def test_ray_hit(self):
+    s = Sphere()
+    r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    r.intersect(s)
+    hit = r.hit()
+    self.assertEqual(hit, Intersection(4, s))
+    r = Ray(Point(0, 2, -5), Vector(0, 0, 1))
+    r.intersect(s)
+    hit = r.hit()
+    self.assertEqual(hit, None)
+    r = Ray(Point(0, 0, 0), Vector(0, 0, 1))
+    r.intersect(s)
+    hit = r.hit()
+    self.assertEqual(hit, Intersection(1, s))
+    r = Ray(Point(0, 0, 5), Vector(0, 0, 1))
+    r.intersect(s)
+    hit = r.hit()
+    self.assertEqual(hit, None)

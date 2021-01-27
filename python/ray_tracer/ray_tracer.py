@@ -6,6 +6,9 @@ class Intersection:
     self.t = t
     self.shape = shape
 
+  def __eq__(self, intersection):
+    return self.t == intersection.t and self.shape == intersection.shape
+
   def __getitem__(self, key):
     if key == 0:
       return self.t
@@ -31,3 +34,9 @@ class Ray:
         intersections.append(Intersection(t, shape))
       intersections.sort(key=itemgetter(0))
       self.intersections = intersections
+
+  def hit(self):
+    for intersection in self.intersections:
+      if intersection.t >= 0:
+        return intersection
+    return None
