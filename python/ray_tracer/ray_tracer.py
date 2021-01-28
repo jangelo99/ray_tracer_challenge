@@ -29,11 +29,9 @@ class Ray:
   def intersect(self, shape):
     xs = shape.intersect(self)
     if len(xs) > 0:
-      intersections = list()
       for t in xs:
-        intersections.append(Intersection(t, shape))
-      intersections.sort(key=itemgetter(0))
-      self.intersections = intersections
+        self.intersections.append(Intersection(t, shape))
+      self.intersections.sort(key=itemgetter(0))
 
   def hit(self):
     for intersection in self.intersections:
