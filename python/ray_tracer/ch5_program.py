@@ -1,4 +1,5 @@
 from canvas import Canvas, Color
+from matrix import Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Shearing_Matrix
 from primitive import Sphere
 from ray_tracer import Ray
 from tuple import Point
@@ -17,6 +18,11 @@ if __name__ == '__main__':
   canvas = Canvas(canvas_pixels, canvas_pixels)
   red = Color(1, 0, 0)
   shape = Sphere()
+
+#  shape.set_transform(Scaling_Matrix(1, 0.5, 1))
+#  shape.set_transform(Scaling_Matrix(0.5, 1, 1))
+#  shape.set_transform(Rotation_Matrix(Rotation_Axis.Z, 45) * Scaling_Matrix(0.5, 1, 1))
+#  shape.set_transform(Shearing_Matrix(1, 0, 0, 0, 0, 0) * Scaling_Matrix(0.5, 1, 1))
 
   print("Creating canvas...")
   for y in range(canvas_pixels):
