@@ -17,6 +17,7 @@ class Intersection:
     else:
       raise IndexError("Intersection item index must be 0 or 1")
 
+
 class Ray:
   def __init__(self, origin, direction):
     self.origin = origin
@@ -27,7 +28,8 @@ class Ray:
     return self.origin.add(self.direction.scalar_multiply(t))
 
   def intersect(self, shape):
-    xs = shape.intersect(self)
+    ray2 = self.transform(shape.transform.inverse())
+    xs = shape.intersect(ray2)
     if len(xs) > 0:
       for t in xs:
         self.intersections.append(Intersection(t, shape))
@@ -38,3 +40,8 @@ class Ray:
       if intersection.t >= 0:
         return intersection
     return None
+
+  def transform(self, matrix):
+    origin = matrix * self.origin
+    direction = matrix * self.direction
+    return Ray(origin, direction)

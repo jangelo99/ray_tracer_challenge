@@ -2,6 +2,7 @@ import math
 import uuid
 
 from abc import ABC, abstractmethod
+from matrix import Identity_Matrix
 from tuple import Point
 
 
@@ -9,7 +10,11 @@ class Primitive(ABC):
   def __init__(self):
     self.uid = str(uuid.uuid4())
     self.origin = Point(0, 0, 0)
+    self.transform = Identity_Matrix(4)
     super().__init__()
+
+  def set_transform(self, transform):
+    self.transform = transform
 
   @abstractmethod
   def intersect(self, ray):
