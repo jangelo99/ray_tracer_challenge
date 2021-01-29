@@ -1,3 +1,4 @@
+import math
 import unittest
 
 from matrix import Identity_Matrix, Translation_Matrix
@@ -39,3 +40,15 @@ class PrimitiveTestCase(unittest.TestCase):
     translation = Translation_Matrix(2, 3, 4)
     s.set_transform(translation)
     self.assertEqual(s.transform, translation)
+
+  def test_normal_at(self):
+    s = Sphere()
+    n = s.normal_at(Point(1, 0, 0))
+    self.assertTrue(n.equals(Vector(1, 0, 0)))
+    n = s.normal_at(Point(0, 1, 0))
+    self.assertTrue(n.equals(Vector(0, 1, 0)))
+    n = s.normal_at(Point(0, 0, 1))
+    self.assertTrue(n.equals(Vector(0, 0, 1)))
+    n = s.normal_at(Point(math.sqrt(3)/3.0, math.sqrt(3)/3.0, math.sqrt(3)/3.0))
+    self.assertTrue(n.equals(Vector(math.sqrt(3)/3.0, math.sqrt(3)/3.0, math.sqrt(3)/3.0)))
+    self.assertEqual(n.magnitude(), 1.0)

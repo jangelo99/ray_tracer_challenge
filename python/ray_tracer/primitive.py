@@ -16,6 +16,9 @@ class Primitive(ABC):
   def set_transform(self, transform):
     self.transform = transform
 
+  def normal_at(self, p):
+    return p.subtract(self.origin).normalize()
+
   @abstractmethod
   def intersect(self, ray):
     pass
