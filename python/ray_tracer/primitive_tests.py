@@ -1,7 +1,7 @@
 import math
 import unittest
 
-from matrix import Identity_Matrix, Translation_Matrix
+from matrix import Identity_Matrix, Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Translation_Matrix
 from primitive import Sphere
 from ray_tracer import Ray
 from tuple import Point, Vector
@@ -52,3 +52,13 @@ class PrimitiveTestCase(unittest.TestCase):
     n = s.normal_at(Point(math.sqrt(3)/3.0, math.sqrt(3)/3.0, math.sqrt(3)/3.0))
     self.assertTrue(n.equals(Vector(math.sqrt(3)/3.0, math.sqrt(3)/3.0, math.sqrt(3)/3.0)))
     self.assertEqual(n.magnitude(), 1.0)
+    # test normals on transformed sphere
+    s = Sphere()
+    s.set_transform(Translation_Matrix(0, 1, 0))
+    n = s.normal_at(Point(0, 1.70711, -0.70711))
+    self.assertTrue(n.equals(Vector(0, 0.70711, -0.70711)))
+    s = Sphere()
+    m = Scaling_Matrix(1, 0.5, 1) * Rotation_Matrix(Rotation_Axis.Z, 36)
+    s.set_transform(m)
+    n = s.normal_at(Point(0, math.sqrt(2)/2.0, -1.0 * math.sqrt(2)/2.0))
+    self.assertTrue(n.equals(Vector(0, 0.97014, -0.24254)))

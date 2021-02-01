@@ -16,8 +16,13 @@ class Primitive(ABC):
   def set_transform(self, transform):
     self.transform = transform
 
-  def normal_at(self, p):
-    return p.subtract(self.origin).normalize()
+  def normal_at(self, world_point):
+    inv_transform = self.transform.inverse()
+    object_point = inv_transform * world_point
+    object_normal = object_point.subtract(self.origin)
+    world_normal = inv_transform.transpose() * object_normal
+    world_normal.w = 0
+    return world_normal.normalize()
 
   @abstractmethod
   def intersect(self, ray):
