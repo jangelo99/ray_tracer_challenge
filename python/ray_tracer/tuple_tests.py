@@ -125,5 +125,16 @@ class TupleTestCase(unittest.TestCase):
     result = v2.cross(v1)
     self.assertTrue(result.equals(Vector(1, -2, 1)))
 
+  def test_reflect(self):
+    v = Vector(1, -1, 0)
+    n = Vector(0, 1, 0)
+    r = v.reflect(n)
+    self.assertTrue(r.equals(Vector(1, 1, 0)))
+    v = Vector(0, -1, 0)
+    n = Vector(math.sqrt(2.0)/2.0, math.sqrt(2.0)/2.0, 0)
+    r = v.reflect(n)
+    self.assertTrue(r.equals(Vector(1, 0, 0)))
+
+
 if __name__ == '__main__':
     unittest.main()

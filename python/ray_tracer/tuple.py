@@ -102,3 +102,6 @@ class Vector(Tuple):
     y = (self.z * vec.x) - (self.x * vec.z)
     z = (self.x * vec.y) - (self.y * vec.x)
     return Vector(x, y, z)
+
+  def reflect(self, normal):
+    return self.subtract(normal.scalar_multiply(2.0 * self.dot(normal)))
