@@ -1,8 +1,9 @@
 import math
 import unittest
 
+from canvas import Color
 from matrix import Identity_Matrix, Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Translation_Matrix
-from primitive import Sphere
+from primitive import Material, Sphere
 from ray_tracer import Ray
 from tuple import Point, Vector
 
@@ -62,3 +63,22 @@ class PrimitiveTestCase(unittest.TestCase):
     s.set_transform(m)
     n = s.normal_at(Point(0, math.sqrt(2)/2.0, -1.0 * math.sqrt(2)/2.0))
     self.assertTrue(n.equals(Vector(0, 0.97014, -0.24254)))
+
+  def test_default_material(self):
+    m = Material()
+    self.assertTrue(m.color.equals(Color(1.0, 1.0, 1.0)))
+    self.assertEqual(m.ambient, 0.1)
+    self.assertEqual(m.diffuse, 0.9)
+    self.assertEqual(m.specular, 0.9)
+    self.assertEqual(m.shininess, 200.0)
+
+  def test_sphere_material(self):
+    s = Sphere()
+    m = Material()
+    self.assertTrue(s.material.equals(m))
+    s = Sphere()
+    m = Material()
+    m.ambient = 1.0
+    s.material = m
+    self.assertEqual(s.material.ambient, 1.0)
+    self.assertTrue(s.material.equals(m))
