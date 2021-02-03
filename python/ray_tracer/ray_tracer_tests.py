@@ -1,8 +1,10 @@
+import math
 import unittest
 
+from canvas import Color
 from matrix import Scaling_Matrix, Translation_Matrix
-from primitive import Sphere
-from ray_tracer import Intersection, Ray
+from primitive import Material, Sphere
+from ray_tracer import Intersection, PointLight, Ray
 from tuple import Point, Vector
 
 class RayTracerTestCase(unittest.TestCase):
@@ -73,3 +75,33 @@ class RayTracerTestCase(unittest.TestCase):
     r.intersect(s)
     xs = r.intersections
     self.assertEqual(len(xs), 0)
+
+  def test_lighting_at(self):
+    m = Material()
+    position = Point(0, 0, 0)
+    intensity = Color(1, 1, 1)
+    eyev = Vector(0, 0, -1)
+    normalv = Vector(0, 0, -1)
+    light = PointLight(Point(0, 0, -10), intensity)
+    result = light.lighting_at(m, position, eyev, normalv)
+    self.assertTrue(result.equals(Color(1.9, 1.9, 1.9)))
+    eyev = Vector(0, math.sqrt(2.0)/2.0, -1*math.sqrt(2.0)/2.0)
+    normalv = Vector(0, 0, -1)
+    light = PointLight(Point(0, 0, -10), intensity)
+    result = light.lighting_at(m, position, eyev, normalv)
+    self.assertTrue(result.equals(Color(1.0, 1.0, 1.0)))
+    eyev = Vector(0, 0, -1)
+    normalv = Vector(0, 0, -1)
+    light = PointLight(Point(0, 10, -10), intensity)
+    result = light.lighting_at(m, position, eyev, normalv)
+    self.assertTrue(result.equals(Color(0.7364, 0.7364, 0.7364)))
+    eyev = Vector(0, -1*math.sqrt(2.0)/2.0, -1*math.sqrt(2.0)/2.0)
+    normalv = Vector(0, 0, -1)
+    light = PointLight(Point(0, 10, -10), intensity)
+    result = light.lighting_at(m, position, eyev, normalv)
+    self.assertTrue(result.equals(Color(1.6364, 1.6364, 1.6364)))
+    eyev = Vector(0, 0, -1)
+    normalv = Vector(0, 0, -1)
+    light = PointLight(Point(0, 0, 10), intensity)
+    result = light.lighting_at(m, position, eyev, normalv)
+    self.assertTrue(result.equals(Color(0.1, 0.1, 0.1)))

@@ -1,5 +1,8 @@
+import math
 
+from canvas import Color
 from operator import itemgetter
+
 
 class Intersection:
   def __init__(self, t, shape):
@@ -45,3 +48,30 @@ class Ray:
     origin = matrix * self.origin
     direction = matrix * self.direction
     return Ray(origin, direction)
+
+
+class PointLight:
+  def __init__(self, position, intensity):
+    self.position = position
+    self.intensity = intensity
+
+  def lighting_at(self, material, point, eyev, normalv):
+    effective_color = material.color.hadamard_product(self.intensity)
+    lightv = self.position.subtract(point).normalize()
+    ambient = effective_color.scalar_multiply(material.ambient)
+
+    light_dot_normal = lightv.dot(normalv)
+    if light_dot_normal < 0:
+      diffuse = Color(0.0, 0.0, 0.0)
+      specular = Color(0.0, 0.0, 0.0)
+    else:
+      diffuse = effective_color.scalar_multiply(material.diffuse * light_dot_normal)
+      reflectv = lightv.scalar_multiply(-1.0).reflect(normalv)
+      reflect_dot_eye = reflectv.dot(eyev)
+      if reflect_dot_eye < 0:
+        specular = Color(0.0, 0.0, 0.0)
+      else:
+        factor = math.pow(reflect_dot_eye, material.shininess)
+        specular = self.intensity.scalar_multiply(material.specular * factor)
+
+    return ambient.add(diffuse.add(specular))
