@@ -62,22 +62,25 @@ class Canvas:
         for x in range(self.width):
           color = self.pixel_at(x, y)
           r = max(min(round(color.r * MAX_COLOR_VALUE), MAX_COLOR_VALUE), 0)
-          if len(row_str) + len(str(r)) > MAX_LINE_LENGTH:
+          r_str = "%d " % r
+          if len(row_str) + len(r_str) > MAX_LINE_LENGTH:
             f.write(row_str.strip() + "\n")
-            row_str = str(r) + " "
+            row_str = r_str
           else:
-            row_str += str(r) + " "
+            row_str += r_str
           g = max(min(round(color.g * MAX_COLOR_VALUE), MAX_COLOR_VALUE), 0)
-          if len(row_str) + len(str(g)) > MAX_LINE_LENGTH:
+          g_str = "%d " % g
+          if len(row_str) + len(g_str) > MAX_LINE_LENGTH:
             f.write(row_str.strip() + "\n")
-            row_str = str(g) + " "
+            row_str = g_str
           else:
-            row_str += str(g) + " "
+            row_str += g_str
           b = max(min(round(color.b * MAX_COLOR_VALUE), MAX_COLOR_VALUE), 0)
-          if len(row_str) + len(str(b)) > MAX_LINE_LENGTH:
+          b_str = "%d " % b
+          if len(row_str) + len(b_str) > MAX_LINE_LENGTH:
             f.write(row_str.strip() + "\n")
-            row_str = str(b) + " "
+            row_str = b_str
           else:
-            row_str += str(b) + " "
+            row_str += b_str
         # write line at end of each row
         f.write(row_str.strip() + "\n")
