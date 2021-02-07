@@ -106,7 +106,6 @@ class RayTracerTestCase(unittest.TestCase):
     result = light.lighting_at(m, position, eyev, normalv)
     self.assertTrue(result.equals(Color(0.1, 0.1, 0.1)))
 
-
   def test_default_world(self):
     w = World.default_world()
     self.assertTrue(w.light.intensity.equals(Color(1, 1, 1)))
@@ -118,3 +117,13 @@ class RayTracerTestCase(unittest.TestCase):
     self.assertEqual(s1.material.specular, 0.2)
     s2 = w.shapes[1]
     self.assertEqual(s2.transform, Scaling_Matrix(0.5, 0.5, 0.5))
+
+  def test_world_intersect(self):
+    w = World.default_world()
+    r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    xs = w.intersect(r)
+    self.assertEqual(len(xs), 4)
+    self.assertEqual(xs[0].t, 4)
+    self.assertEqual(xs[1].t, 4.5)
+    self.assertEqual(xs[2].t, 5.5)
+    self.assertEqual(xs[3].t, 6)

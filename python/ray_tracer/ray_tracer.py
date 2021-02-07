@@ -88,6 +88,11 @@ class World:
   def add_shape(self, shape):
     self.shapes.append(shape)
 
+  def intersect(self, ray):
+    for shape in self.shapes:
+      ray.intersect(shape)
+    return ray.intersections
+
   @staticmethod
   def default_world():
     w = World()
