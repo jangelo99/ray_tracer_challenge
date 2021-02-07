@@ -1,7 +1,10 @@
 import math
 
 from canvas import Color
+from matrix import Scaling_Matrix
 from operator import itemgetter
+from primitive import Material, Sphere
+from tuple import Point
 
 
 class Intersection:
@@ -75,3 +78,28 @@ class PointLight:
         specular = self.intensity.scalar_multiply(material.specular * factor)
 
     return ambient.add(diffuse.add(specular))
+
+
+class World:
+  def __init__(self):
+    self.light = None
+    self.shapes = []
+
+  def add_shape(self, shape):
+    self.shapes.append(shape)
+
+  @staticmethod
+  def default_world():
+    w = World()
+    w.light = PointLight(Point(-10, 10, 10), Color(1, 1, 1))
+    s1 = Sphere()
+    material = Material()
+    material.color = Color(0.8, 1.0, 0.6)
+    material.diffuse = 0.7
+    material.specular = 0.2
+    s1.material = material
+    s2 = Sphere()
+    s2.set_transform(Scaling_Matrix(0.5, 0.5, 0.5))
+    w.add_shape(s1)
+    w.add_shape(s2)
+    return w

@@ -4,7 +4,7 @@ import unittest
 from canvas import Color
 from matrix import Scaling_Matrix, Translation_Matrix
 from primitive import Material, Sphere
-from ray_tracer import Intersection, PointLight, Ray
+from ray_tracer import Intersection, PointLight, Ray, World
 from tuple import Point, Vector
 
 class RayTracerTestCase(unittest.TestCase):
@@ -105,3 +105,16 @@ class RayTracerTestCase(unittest.TestCase):
     light = PointLight(Point(0, 0, 10), intensity)
     result = light.lighting_at(m, position, eyev, normalv)
     self.assertTrue(result.equals(Color(0.1, 0.1, 0.1)))
+
+
+  def test_default_world(self):
+    w = World.default_world()
+    self.assertTrue(w.light.intensity.equals(Color(1, 1, 1)))
+    self.assertTrue(w.light.position.equals(Point(-10, 10, 10)))
+    self.assertEqual(len(w.shapes), 2)
+    s1 = w.shapes[0]
+    self.assertTrue(s1.material.color.equals(Color(0.8, 1.0, 0.6)))
+    self.assertEqual(s1.material.diffuse, 0.7)
+    self.assertEqual(s1.material.specular, 0.2)
+    s2 = w.shapes[1]
+    self.assertEqual(s2.transform, Scaling_Matrix(0.5, 0.5, 0.5))
