@@ -113,6 +113,15 @@ class World:
     return self.light.lighting_at(comps.shape.material, comps.point,
                                   comps.eyev, comps.normalv)
 
+  def color_at(self, ray):
+    self.intersect(ray)
+    hit = ray.hit()
+    if hit:
+      comps = hit.prepare_computations(ray)
+      return self.shade_hit(comps)
+    else:
+      return Color(0.0, 0.0, 0.0)
+
   @staticmethod
   def default_world():
     w = World()

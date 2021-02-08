@@ -166,3 +166,22 @@ class RayTracerTestCase(unittest.TestCase):
     comps = i.prepare_computations(r)
     c = w.shade_hit(comps)
     self.assertTrue(c.equals(Color(0.90498, 0.90498, 0.90498)))
+
+  def test_world_color_at(self):
+    # color when ray misses
+    w = World.default_world()
+    r = Ray(Point(0, 0, -5), Vector(0, 1, 0))
+    c = w.color_at(r)
+    self.assertTrue(c.equals(Color(0, 0, 0)))
+    # color when ray hits
+    r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    c = w.color_at(r)
+    self.assertTrue(c.equals(Color(0.38066, 0.47583, 0.2855)))
+    # color with an intersection behind the ray
+    outer = w.shapes[0]
+    outer.material.ambient = 1
+    inner = w.shapes[1]
+    inner.material.ambient = 1
+    r = Ray(Point(0, 0, 0.75), Vector(0, 0, -1))
+    c = w.color_at(r)
+    self.assertTrue(c.equals(inner.material.color))
