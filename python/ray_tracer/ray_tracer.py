@@ -109,10 +109,14 @@ class World:
       ray.intersect(shape)
     return ray.intersections
 
+  def shade_hit(self, comps):
+    return self.light.lighting_at(comps.shape.material, comps.point,
+                                  comps.eyev, comps.normalv)
+
   @staticmethod
   def default_world():
     w = World()
-    w.light = PointLight(Point(-10, 10, 10), Color(1, 1, 1))
+    w.light = PointLight(Point(-10, 10, -10), Color(1, 1, 1))
     s1 = Sphere()
     material = Material()
     material.color = Color(0.8, 1.0, 0.6)
