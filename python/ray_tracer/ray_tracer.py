@@ -23,6 +23,22 @@ class Intersection:
     else:
       raise IndexError("Intersection item index must be 0 or 1")
 
+  def prepare_computations(self, ray):
+    return Computations(self, ray)
+
+class Computations:
+  def __init__(self, intersection, ray):
+    self.t = intersection.t
+    self.shape = intersection.shape
+    self.point = ray.position(self.t)
+    self.eyev = ray.direction.scalar_multiply(-1.0)
+    self.normalv = self.shape.normal_at(self.point)
+    if self.normalv.dot(self.eyev) < 0:
+      self.inside = True
+      self.normalv = self.normalv.scalar_multiply(-1.0)
+    else:
+      self.inside = False
+
 
 class Ray:
   def __init__(self, origin, direction):
