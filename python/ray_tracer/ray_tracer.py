@@ -1,7 +1,7 @@
 import math
 
 from canvas import Color
-from matrix import Scaling_Matrix
+from matrix import Matrix, Scaling_Matrix, Translation_Matrix
 from operator import itemgetter
 from primitive import Material, Sphere
 from tuple import Point
@@ -121,6 +121,17 @@ class World:
       return self.shade_hit(comps)
     else:
       return Color(0.0, 0.0, 0.0)
+
+  def view_transform(self, from_p, to_p, up):
+    forward = to_p.subtract(from_p).normalize()
+    upn = up.normalize()
+    left = forward.cross(upn)
+    true_up = left.cross(forward)
+    orientation = Matrix([[left.x, left.y, left.z, 0.0],
+                          [true_up.x, true_up.y, true_up.z, 0.0],
+                          [-1*forward.x, -1*forward.y, -1*forward.z, 0.0],
+                          [0.0, 0.0, 0.0, 1.0]])
+    return orientation * Translation_Matrix(-1*from_p.x, -1*from_p.y, -1*from_p.z)
 
   @staticmethod
   def default_world():

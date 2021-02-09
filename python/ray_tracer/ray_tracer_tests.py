@@ -2,7 +2,7 @@ import math
 import unittest
 
 from canvas import Color
-from matrix import Scaling_Matrix, Translation_Matrix
+from matrix import Matrix, Identity_Matrix, Scaling_Matrix, Translation_Matrix
 from primitive import Material, Sphere
 from ray_tracer import Intersection, PointLight, Ray, World
 from tuple import Point, Vector
@@ -185,3 +185,29 @@ class RayTracerTestCase(unittest.TestCase):
     r = Ray(Point(0, 0, 0.75), Vector(0, 0, -1))
     c = w.color_at(r)
     self.assertTrue(c.equals(inner.material.color))
+
+  def test_world_view_transform(self):
+    w = World.default_world()
+    from_p = Point(0, 0, 0)
+    to_p = Point(0, 0, -1)
+    up = Vector(0, 1, 0)
+    t = w.view_transform(from_p, to_p, up)
+    self.assertEqual(t, Identity_Matrix(4))
+    from_p = Point(0, 0, 0)
+    to_p = Point(0, 0, 1)
+    up = Vector(0, 1, 0)
+    t = w.view_transform(from_p, to_p, up)
+    self.assertEqual(t, Scaling_Matrix(-1, 1, -1))
+    from_p = Point(0, 0, 8)
+    to_p = Point(0, 0, 0)
+    up = Vector(0, 1, 0)
+    t = w.view_transform(from_p, to_p, up)
+    self.assertEqual(t, Translation_Matrix(0, 0, -8))
+    from_p = Point(1, 3, 2)
+    to_p = Point(4, -2, 8)
+    up = Vector(1, 1, 0)
+    t = w.view_transform(from_p, to_p, up)
+    self.assertEqual(t, Matrix([[-0.50709, 0.50709, 0.67612, -2.36643],
+                                [0.76772, 0.60609, 0.12122, -2.82843],
+                                [-0.35857, 0.59761, -0.71714, 0.00000],
+                                [0.00000, 0.00000, 0.00000, 1.00000]]))
