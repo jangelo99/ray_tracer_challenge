@@ -1,6 +1,6 @@
 import math
 
-from canvas import Color
+from canvas import Canvas, Color
 from matrix import Matrix, Identity_Matrix, Scaling_Matrix, Translation_Matrix
 from operator import itemgetter
 from primitive import Material, Sphere
@@ -177,3 +177,12 @@ class Camera:
     origin = inv_transform * Point(0, 0, 0)
     direction = pixel.subtract(origin).normalize()
     return Ray(origin, direction)
+
+  def render(self, world):
+    image = Canvas(self.hsize, self.vsize)
+    for y in range(self.vsize):
+      for x in range(self.hsize):
+        ray = self.ray_for_pixel(x, y)
+        color = world.color_at(ray)
+        image.write_pixel(x, y, color)
+    return image

@@ -232,3 +232,13 @@ class RayTracerTestCase(unittest.TestCase):
     r = c.ray_for_pixel(100, 50)
     self.assertTrue(r.origin.equals(Point(0, 2, -5)))
     self.assertTrue(r.direction.equals(Vector(math.sqrt(2.0)/2.0, 0, -math.sqrt(2.0)/2.0)))
+
+  def test_camera_render(self):
+    w = World.default_world()
+    c = Camera(11, 11, math.pi / 2.0)
+    from_p = Point(0, 0, -5)
+    to_p = Point(0, 0, 0)
+    up = Vector(0, 1, 0)
+    c.transform = w.view_transform(from_p, to_p, up)
+    image = c.render(w)
+    self.assertTrue(image.pixel_at(5, 5).equals(Color(0.38066, 0.47583, 0.2855)))
