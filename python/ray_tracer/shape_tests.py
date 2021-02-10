@@ -3,11 +3,11 @@ import unittest
 
 from canvas import Color
 from matrix import Identity_Matrix, Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Translation_Matrix
-from primitive import Material, Sphere
 from ray_tracer import Ray
+from shape import Material, Sphere
 from tuple import Point, Vector
 
-class PrimitiveTestCase(unittest.TestCase):
+class ShapeTestCase(unittest.TestCase):
 
   def test_sphere_intersect(self):
     r = Ray(Point(0, 0, -5), Vector(0, 0, 1))

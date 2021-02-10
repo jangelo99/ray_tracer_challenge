@@ -1,7 +1,7 @@
 from canvas import Canvas, Color
 from matrix import Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Shearing_Matrix
-from primitive import Sphere
 from ray_tracer import Ray
+from shape import Sphere
 from tuple import Point
 
 if __name__ == '__main__':

@@ -2,8 +2,8 @@ import math
 
 from canvas import Canvas, Color
 from matrix import Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Translation_Matrix
-from primitive import Material, Sphere
 from ray_tracer import Camera, PointLight, World
+from shape import Material, Sphere
 from tuple import Point, Vector
 
 if __name__ == '__main__':

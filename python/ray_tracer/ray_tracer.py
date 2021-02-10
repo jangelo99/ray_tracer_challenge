@@ -3,7 +3,7 @@ import math
 from canvas import Canvas, Color
 from matrix import Matrix, Identity_Matrix, Scaling_Matrix, Translation_Matrix
 from operator import itemgetter
-from primitive import Material, Sphere
+from shape import Material, Sphere
 from tuple import Point
 
 

@@ -3,8 +3,8 @@ import unittest
 
 from canvas import Color
 from matrix import Matrix, Identity_Matrix, Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Translation_Matrix
-from primitive import Material, Sphere
 from ray_tracer import Camera, Intersection, PointLight, Ray, World
+from shape import Material, Sphere
 from tuple import Point, Vector
 from utils import float_equal
 

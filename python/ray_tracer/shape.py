@@ -27,7 +27,7 @@ class Material:
       return False
 
 
-class Primitive(ABC):
+class Shape(ABC):
   def __init__(self):
     self.uid = str(uuid.uuid4())
     self.origin = Point(0, 0, 0)
@@ -51,7 +51,7 @@ class Primitive(ABC):
     pass
 
 
-class Sphere(Primitive):
+class Sphere(Shape):
 
   def intersect(self, ray):
     sphere_to_ray = ray.origin.subtract(self.origin)
