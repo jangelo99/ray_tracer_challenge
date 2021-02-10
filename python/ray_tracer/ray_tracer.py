@@ -166,3 +166,14 @@ class Camera:
       self.half_width = half_view * aspect
       self.half_height = half_view
     self.pixel_size = (self.half_width * 2.0) / self.hsize
+
+  def ray_for_pixel(self, px, py):
+    xoffset = (px + 0.5) * self.pixel_size
+    yoffset = (py + 0.5) * self.pixel_size
+    worldx = self.half_width - xoffset
+    worldy = self.half_height - yoffset
+    inv_transform = self.transform.inverse()
+    pixel = inv_transform * Point(worldx, worldy, -1.0)
+    origin = inv_transform * Point(0, 0, 0)
+    direction = pixel.subtract(origin).normalize()
+    return Ray(origin, direction)

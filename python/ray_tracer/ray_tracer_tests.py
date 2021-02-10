@@ -2,7 +2,7 @@ import math
 import unittest
 
 from canvas import Color
-from matrix import Matrix, Identity_Matrix, Scaling_Matrix, Translation_Matrix
+from matrix import Matrix, Identity_Matrix, Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Translation_Matrix
 from primitive import Material, Sphere
 from ray_tracer import Camera, Intersection, PointLight, Ray, World
 from tuple import Point, Vector
@@ -218,3 +218,17 @@ class RayTracerTestCase(unittest.TestCase):
     self.assertTrue(float_equal(c1.pixel_size, 0.01))
     c2 = Camera(125, 200, math.pi / 2.0)
     self.assertTrue(float_equal(c2.pixel_size, 0.01))
+
+  def test_camera_ray_for_pixel(self):
+    c = Camera(201, 101, math.pi / 2.0)
+    r = c.ray_for_pixel(100, 50)
+    self.assertTrue(r.origin.equals(Point(0, 0, 0)))
+    self.assertTrue(r.direction.equals(Vector(0, 0, -1)))
+    r = c.ray_for_pixel(0, 0)
+    self.assertTrue(r.origin.equals(Point(0, 0, 0)))
+    self.assertTrue(r.direction.equals(Vector(0.66519, 0.33259, -0.66851)))
+    c = Camera(201, 101, math.pi / 2.0)
+    c.transform = Rotation_Matrix(Rotation_Axis.Y, 45) * Translation_Matrix(0, -2, 5)
+    r = c.ray_for_pixel(100, 50)
+    self.assertTrue(r.origin.equals(Point(0, 2, -5)))
+    self.assertTrue(r.direction.equals(Vector(math.sqrt(2.0)/2.0, 0, -math.sqrt(2.0)/2.0)))
