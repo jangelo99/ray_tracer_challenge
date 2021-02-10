@@ -1,7 +1,7 @@
 import math
 
 from canvas import Color
-from matrix import Matrix, Scaling_Matrix, Translation_Matrix
+from matrix import Matrix, Identity_Matrix, Scaling_Matrix, Translation_Matrix
 from operator import itemgetter
 from primitive import Material, Sphere
 from tuple import Point
@@ -148,3 +148,21 @@ class World:
     w.add_shape(s1)
     w.add_shape(s2)
     return w
+
+
+class Camera:
+  def __init__(self, hsize, vsize, field_of_view):
+    self.hsize = hsize
+    self.vsize = vsize
+    self.field_of_view = field_of_view
+    self.transform = Identity_Matrix(4)
+    # calculate half_height, half_width, and pixel size
+    half_view = math.tan(self.field_of_view / 2.0)
+    aspect = self.hsize / self.vsize
+    if aspect >= 1:
+      self.half_width = half_view
+      self.half_height = half_view / aspect
+    else:
+      self.half_width = half_view * aspect
+      self.half_height = half_view
+    self.pixel_size = (self.half_width * 2.0) / self.hsize

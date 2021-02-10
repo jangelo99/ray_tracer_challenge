@@ -4,8 +4,9 @@ import unittest
 from canvas import Color
 from matrix import Matrix, Identity_Matrix, Scaling_Matrix, Translation_Matrix
 from primitive import Material, Sphere
-from ray_tracer import Intersection, PointLight, Ray, World
+from ray_tracer import Camera, Intersection, PointLight, Ray, World
 from tuple import Point, Vector
+from utils import float_equal
 
 class RayTracerTestCase(unittest.TestCase):
 
@@ -211,3 +212,9 @@ class RayTracerTestCase(unittest.TestCase):
                                 [0.76772, 0.60609, 0.12122, -2.82843],
                                 [-0.35857, 0.59761, -0.71714, 0.00000],
                                 [0.00000, 0.00000, 0.00000, 1.00000]]))
+
+  def test_camera_pixel_size(self):
+    c1 = Camera(200, 125, math.pi / 2.0)
+    self.assertTrue(float_equal(c1.pixel_size, 0.01))
+    c2 = Camera(125, 200, math.pi / 2.0)
+    self.assertTrue(float_equal(c2.pixel_size, 0.01))
