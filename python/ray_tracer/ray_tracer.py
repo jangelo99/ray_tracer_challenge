@@ -74,11 +74,14 @@ class PointLight:
     self.position = position
     self.intensity = intensity
 
-  def lighting_at(self, material, point, eyev, normalv):
+  def lighting_at(self, material, point, eyev, normalv, in_shadow=False):
     effective_color = material.color.hadamard_product(self.intensity)
-    lightv = self.position.subtract(point).normalize()
     ambient = effective_color.scalar_multiply(material.ambient)
 
+    if in_shadow:
+      return ambient
+
+    lightv = self.position.subtract(point).normalize()
     light_dot_normal = lightv.dot(normalv)
     if light_dot_normal < 0:
       diffuse = Color(0.0, 0.0, 0.0)

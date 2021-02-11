@@ -106,6 +106,13 @@ class RayTracerTestCase(unittest.TestCase):
     light = PointLight(Point(0, 0, 10), intensity)
     result = light.lighting_at(m, position, eyev, normalv)
     self.assertTrue(result.equals(Color(0.1, 0.1, 0.1)))
+    # test when in_shadow is true
+    eyev = Vector(0, 0, -1)
+    normalv = Vector(0, 0, -1)
+    light = PointLight(Point(0, 0, -10), intensity)
+    in_shadow = True
+    result = light.lighting_at(m, position, eyev, normalv, in_shadow)
+    self.assertTrue(result.equals(Color(0.1, 0.1, 0.1)))
 
   def test_default_world(self):
     w = World.default_world()
