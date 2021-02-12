@@ -249,3 +249,14 @@ class RayTracerTestCase(unittest.TestCase):
     c.transform = w.view_transform(from_p, to_p, up)
     image = c.render(w)
     self.assertTrue(image.pixel_at(5, 5).equals(Color(0.38066, 0.47583, 0.2855)))
+
+  def test_world_is_shadowed(self):
+    w = World.default_world()
+    p = Point(0, 10, 0)
+    self.assertEqual(w.is_shadowed(p), False)
+    p = Point(10, -10, 10)
+    self.assertEqual(w.is_shadowed(p), True)
+    p = Point(-20, 20, -20)
+    self.assertEqual(w.is_shadowed(p), False)
+    p = Point(-2, 2, -2)
+    self.assertEqual(w.is_shadowed(p), False)

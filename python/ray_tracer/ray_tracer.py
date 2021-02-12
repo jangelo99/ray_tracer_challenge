@@ -112,6 +112,18 @@ class World:
       ray.intersect(shape)
     return ray.intersections
 
+  def is_shadowed(self, point):
+    v = self.light.position.subtract(point)
+    distance = v.magnitude()
+    direction = v.normalize()
+    ray = Ray(point, direction)
+    self.intersect(ray)
+    hit = ray.hit()
+    if hit and hit.t < distance:
+      return True
+    else:
+      return False
+
   def shade_hit(self, comps):
     return self.light.lighting_at(comps.shape.material, comps.point,
                                   comps.eyev, comps.normalv)
