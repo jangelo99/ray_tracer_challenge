@@ -6,7 +6,7 @@ from matrix import Matrix, Identity_Matrix, Rotation_Axis, Rotation_Matrix, Scal
 from ray_tracer import Camera, Intersection, PointLight, Ray, World
 from shape import Material, Sphere
 from tuple import Point, Vector
-from utils import float_equal
+from utils import float_equal, EPSILON
 
 class RayTracerTestCase(unittest.TestCase):
 
@@ -156,6 +156,13 @@ class RayTracerTestCase(unittest.TestCase):
     self.assertTrue(comps.eyev.equals(Vector(0, 0, -1)))
     self.assertTrue(comps.normalv.equals(Vector(0, 0, -1)))
     self.assertTrue(comps.inside == True)
+    # test case for over_point attribute
+    r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    shape = Sphere()
+    shape.transform = Translation_Matrix(0, 0, 1)
+    i = Intersection(5, shape)
+    comps = i.prepare_computations(r)
+    self.assertTrue(comps.over_point.z < -1.0 * (EPSILON / 2.0))
 
   def test_world_shade_hit(self):
     w = World.default_world()
@@ -174,6 +181,19 @@ class RayTracerTestCase(unittest.TestCase):
     comps = i.prepare_computations(r)
     c = w.shade_hit(comps)
     self.assertTrue(c.equals(Color(0.90498, 0.90498, 0.90498)))
+    # test case for shadowed point
+    w = World()
+    w.light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
+    s1 = Sphere()
+    w.add_shape(s1)
+    s2 = Sphere()
+    s2.transform = Translation_Matrix(0, 0, 10)
+    w.add_shape(s2)
+    r = Ray(Point(0, 0, 5), Vector(0, 1, 0))
+    i = Intersection(4, s2)
+    comps = i.prepare_computations(r)
+    c = w.shade_hit(comps)
+    self.assertTrue(c.equals(Color(0.1, 0.1, 0.1)))
 
   def test_world_color_at(self):
     # color when ray misses

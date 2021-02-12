@@ -5,6 +5,7 @@ from matrix import Matrix, Identity_Matrix, Scaling_Matrix, Translation_Matrix
 from operator import itemgetter
 from shape import Material, Sphere
 from tuple import Point
+from utils import EPSILON
 
 
 class Intersection:
@@ -38,6 +39,7 @@ class Computations:
       self.normalv = self.normalv.scalar_multiply(-1.0)
     else:
       self.inside = False
+    self.over_point = self.point.add(self.normalv.scalar_multiply(EPSILON))
 
 
 class Ray:
@@ -125,8 +127,9 @@ class World:
       return False
 
   def shade_hit(self, comps):
+    shadowed = self.is_shadowed(comps.over_point)
     return self.light.lighting_at(comps.shape.material, comps.point,
-                                  comps.eyev, comps.normalv)
+                                  comps.eyev, comps.normalv, shadowed)
 
   def color_at(self, ray):
     self.intersect(ray)
