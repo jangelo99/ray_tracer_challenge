@@ -33,6 +33,7 @@ class Shape(ABC):
     self.origin = Point(0, 0, 0)
     self.transform = Identity_Matrix(4)
     self.material = Material()
+    self.local_ray = None
     super().__init__()
 
   def set_transform(self, transform):
@@ -46,14 +47,23 @@ class Shape(ABC):
     world_normal.w = 0
     return world_normal.normalize()
 
-  @abstractmethod
   def intersect(self, ray):
+    self.local_ray = ray.transform(self.transform.inverse())
+    return self.local_intersect(self.local_ray)
+
+  @abstractmethod
+  def local_intersect(self, ray):
     pass
+
+class TestShape(Shape):
+
+  def local_intersect(self, ray):
+    return []
 
 
 class Sphere(Shape):
 
-  def intersect(self, ray):
+  def local_intersect(self, ray):
     sphere_to_ray = ray.origin.subtract(self.origin)
     a = ray.direction.dot(ray.direction)
     b = 2.0 * ray.direction.dot(sphere_to_ray)

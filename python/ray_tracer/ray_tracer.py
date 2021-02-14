@@ -52,8 +52,7 @@ class Ray:
     return self.origin.add(self.direction.scalar_multiply(t))
 
   def intersect(self, shape):
-    ray2 = self.transform(shape.transform.inverse())
-    xs = shape.intersect(ray2)
+    xs = shape.intersect(self)
     if len(xs) > 0:
       for t in xs:
         self.intersections.append(Intersection(t, shape))
