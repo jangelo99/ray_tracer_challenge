@@ -79,9 +79,16 @@ class Sphere(Shape):
 
 class Plane(Shape):
 
+  def __init__(self):
+    super().__init__()
+    # all points on the plane have the same object normal
+    self.object_normal = Vector(0, 1, 0)
+
   def normal_at(self, world_point):
-    # all points on plane have same normal
-    return Vector(0, 1, 0)
+    inv_transform = self.transform.inverse()
+    world_normal = inv_transform.transpose() * self.object_normal
+    world_normal.w = 0
+    return world_normal.normalize()
 
   def local_intersect(self, ray):
     if abs(ray.direction.y) < EPSILON:
