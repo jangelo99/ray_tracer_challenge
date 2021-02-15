@@ -4,7 +4,7 @@ import uuid
 from abc import ABC, abstractmethod
 from canvas import Color
 from matrix import Identity_Matrix
-from tuple import Point
+from tuple import Point, Vector
 from utils import float_equal
 
 
@@ -75,3 +75,13 @@ class Sphere(Shape):
       t1 = (-1.0 * b - math.sqrt(discrim)) / (2 * a)
       t2 = (-1.0 * b + math.sqrt(discrim)) / (2 * a)
       return [t1, t2]
+
+
+class Plane(Shape):
+
+  def normal_at(self, world_point):
+    # all points on plane have same normal
+    return Vector(0, 1, 0)
+
+  def local_intersect(self, ray):
+    return []

@@ -4,7 +4,7 @@ import unittest
 from canvas import Color
 from matrix import Identity_Matrix, Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Translation_Matrix
 from ray_tracer import Ray
-from shape import Material, Sphere, TestShape
+from shape import Material, Plane, Sphere, TestShape
 from tuple import Point, Vector
 
 class ShapeTestCase(unittest.TestCase):
@@ -119,3 +119,8 @@ class ShapeTestCase(unittest.TestCase):
     s.set_transform(m)
     n = s.normal_at(Point(0, math.sqrt(2)/2.0, -1.0 * math.sqrt(2)/2.0))
     self.assertTrue(n.equals(Vector(0, 0.97014, -0.24254)))
+
+  def test_plane_normal_at(self):
+    plane = Plane()
+    n1 = plane.normal_at(Point(0, 0, 0))
+    self.assertTrue(n1.equals(Vector(0, 1, 0)))
