@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from canvas import Color
 from matrix import Identity_Matrix
 from tuple import Point, Vector
-from utils import float_equal
+from utils import EPSILON, float_equal
 
 
 class Material:
@@ -84,4 +84,8 @@ class Plane(Shape):
     return Vector(0, 1, 0)
 
   def local_intersect(self, ray):
-    return []
+    if abs(ray.direction.y) < EPSILON:
+      return []
+    else:
+      t = (-1.0 * ray.origin.y) / ray.direction.y
+      return [t]
