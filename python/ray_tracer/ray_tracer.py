@@ -75,8 +75,12 @@ class PointLight:
     self.position = position
     self.intensity = intensity
 
-  def lighting_at(self, material, point, eyev, normalv, in_shadow=False):
-    effective_color = material.color.hadamard_product(self.intensity)
+  def lighting_at(self, material, point, eyev, normalv, in_shadow=False, shape=Sphere()):
+    if material.pattern:
+      color = material.pattern.pattern_at_shape(shape, point)
+    else:
+      color = material.color
+    effective_color = color.hadamard_product(self.intensity)
     ambient = effective_color.scalar_multiply(material.ambient)
 
     if in_shadow:
@@ -127,8 +131,8 @@ class World:
 
   def shade_hit(self, comps):
     shadowed = self.is_shadowed(comps.over_point)
-    return self.light.lighting_at(comps.shape.material, comps.point,
-                                  comps.eyev, comps.normalv, shadowed)
+    return self.light.lighting_at(comps.shape.material, comps.point, comps.eyev,
+                                  comps.normalv, shadowed, comps.shape)
 
   def color_at(self, ray):
     self.intersect(ray)
