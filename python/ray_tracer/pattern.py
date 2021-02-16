@@ -1,3 +1,4 @@
+import math
 
 from abc import ABC, abstractmethod
 from canvas import Color
@@ -25,3 +26,16 @@ class TestPattern(Pattern):
   def pattern_at(self, point):
     return Color(point.x, point.y, point.z)
 
+
+class StripePattern(Pattern):
+
+  def __init__(self, ca, cb):
+    super().__init__()
+    self.ca = ca
+    self.cb = cb
+
+  def pattern_at(self, point):
+    if math.floor(point.x) % 2 == 0:
+      return self.ca
+    else:
+      return self.cb
