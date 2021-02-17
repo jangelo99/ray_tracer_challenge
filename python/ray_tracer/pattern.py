@@ -52,3 +52,18 @@ class GradientPattern(Pattern):
     distance = self.cb.subtract(self.ca)
     fraction = point.x - math.floor(point.x)
     return self.ca.add(distance.scalar_multiply(fraction))
+
+
+class RingPattern(Pattern):
+
+  def __init__(self, ca, cb):
+    super().__init__()
+    self.ca = ca
+    self.cb = cb
+
+  def pattern_at(self, point):
+    dist_xz = math.sqrt(point.x**2 + point.z**2)
+    if math.floor(dist_xz) % 2 == 0:
+      return self.ca
+    else:
+      return self.cb

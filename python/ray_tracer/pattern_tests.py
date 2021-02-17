@@ -2,7 +2,7 @@ import unittest
 
 from canvas import Color
 from matrix import Identity_Matrix, Scaling_Matrix, Translation_Matrix
-from pattern import GradientPattern, StripePattern, TestPattern
+from pattern import GradientPattern, RingPattern, StripePattern, TestPattern
 from shape import Sphere
 from tuple import Point
 
@@ -55,3 +55,10 @@ class PatternTestCase(unittest.TestCase):
     self.assertTrue(pattern.pattern_at(Point(0.25, 0, 0)).equals(Color(0.75, 0.75, 0.75)))
     self.assertTrue(pattern.pattern_at(Point(0.5, 0, 0)).equals(Color(0.5, 0.5, 0.5)))
     self.assertTrue(pattern.pattern_at(Point(0.75, 0, 0)).equals(Color(0.25, 0.25, 0.25)))
+
+  def test_ring_pattern(self):
+    pattern = RingPattern(self.white, self.black)
+    self.assertTrue(pattern.pattern_at(Point(0, 0, 0)).equals(self.white))
+    self.assertTrue(pattern.pattern_at(Point(1, 0, 0)).equals(self.black))
+    self.assertTrue(pattern.pattern_at(Point(0, 0, 1)).equals(self.black))
+    self.assertTrue(pattern.pattern_at(Point(0.708, 0, 0.708)).equals(self.black))
