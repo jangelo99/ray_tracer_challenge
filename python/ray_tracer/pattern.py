@@ -67,3 +67,18 @@ class RingPattern(Pattern):
       return self.ca
     else:
       return self.cb
+
+
+class CheckerPattern(Pattern):
+
+  def __init__(self, ca, cb):
+    super().__init__()
+    self.ca = ca
+    self.cb = cb
+
+  def pattern_at(self, point):
+    dist_xyz = math.floor(point.x) + math.floor(point.y) + math.floor(point.z)
+    if dist_xyz % 2 == 0:
+      return self.ca
+    else:
+      return self.cb
