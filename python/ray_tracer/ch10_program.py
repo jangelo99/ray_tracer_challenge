@@ -2,7 +2,7 @@ import math
 
 from canvas import Canvas, Color
 from matrix import Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Translation_Matrix
-from pattern import StripePattern
+from pattern import CheckerPattern, GradientPattern, RingPattern, StripePattern
 from ray_tracer import Camera, PointLight, World
 from shape import Material, Plane, Sphere
 from tuple import Point, Vector
@@ -15,8 +15,10 @@ if __name__ == '__main__':
   # create plane objects for floor and wall
   floor = Plane()
   floor.material = Material()
-  floor.material.color = Color(1, 0.9, 0.9)
   floor.material.specular = 0
+#  floor.material.color = Color(1, 0.9, 0.9)
+  floor.material.pattern = RingPattern(Color(0.2, 0, 0), Color(1, 1, 1))
+#  floor.material.pattern = CheckerPattern(Color(1, 1, 1), Color(0, 0, 0))
   world.add_shape(floor)
   
   wall = Plane()
@@ -30,7 +32,11 @@ if __name__ == '__main__':
   middle_s = Sphere()
   middle_s.transform = Translation_Matrix(-0.5, 1, 0.5)
   middle_s.material = Material()
-  middle_s.material.color = Color(0.1, 1, 0.5)
+#  middle_s.material.color = Color(0.1, 1, 0.5)
+  check_pattern = CheckerPattern(Color(1, 1, 1), Color(0.1, 1, 0.5))
+  check_pattern.transform = Scaling_Matrix(0.4, 0.4, 0.4)
+  middle_s.material.pattern = check_pattern
+#  middle_s.material.pattern = RingPattern(Color(0.1, 1, 0.5), Color(1, 1, 1))
   middle_s.material.diffuse = 0.7
   middle_s.material.specular = 0.3
   world.add_shape(middle_s)
@@ -38,7 +44,10 @@ if __name__ == '__main__':
   right_s = Sphere()
   right_s.transform = Translation_Matrix(1.5, 0.5, -0.5) * Scaling_Matrix(0.5, 0.5, 0.5)
   right_s.material = Material()
-  right_s.material.color = Color(0.5, 1, 0.1)
+#  right_s.material.color = Color(0.5, 1, 0.1)
+  grad_pattern = GradientPattern(Color(1, 0.1, 0.1), Color(0.5, 1, 0.1))
+  grad_pattern.transform = Rotation_Matrix(Rotation_Axis.Y, 115) * Scaling_Matrix(1.5, 1.5, 1.5)
+  right_s.material.pattern = grad_pattern
   right_s.material.diffuse = 0.7
   right_s.material.specular = 0.3
   world.add_shape(right_s)
