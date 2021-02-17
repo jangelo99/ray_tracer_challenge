@@ -2,11 +2,15 @@ import unittest
 
 from canvas import Color
 from matrix import Identity_Matrix, Scaling_Matrix, Translation_Matrix
-from pattern import StripePattern, TestPattern
+from pattern import GradientPattern, StripePattern, TestPattern
 from shape import Sphere
 from tuple import Point
 
 class PatternTestCase(unittest.TestCase):
+
+  def setUp(self):
+    self.black = Color(0, 0, 0)
+    self.white = Color(1, 1, 1)
 
   def test_test_pattern(self):
     pattern = TestPattern()
@@ -31,18 +35,23 @@ class PatternTestCase(unittest.TestCase):
     self.assertTrue(c.equals(Color(0.75, 0.5, 0.25)))
 
   def test_stripe_pattern(self):
-    black = Color(0, 0, 0)
-    white = Color(1, 1, 1)
-    pattern = StripePattern(white, black)
-    self.assertTrue(pattern.ca.equals(white))
-    self.assertTrue(pattern.cb.equals(black))
-    self.assertTrue(pattern.pattern_at(Point(0, 0, 0)).equals(white))
-    self.assertTrue(pattern.pattern_at(Point(0, 1, 0)).equals(white))
-    self.assertTrue(pattern.pattern_at(Point(0, 2, 0)).equals(white))
-    self.assertTrue(pattern.pattern_at(Point(0, 0, 1)).equals(white))
-    self.assertTrue(pattern.pattern_at(Point(0, 0, 2)).equals(white))
-    self.assertTrue(pattern.pattern_at(Point(0.9, 0, 0)).equals(white))
-    self.assertTrue(pattern.pattern_at(Point(1, 0, 0)).equals(black))
-    self.assertTrue(pattern.pattern_at(Point(-0.1, 0, 0)).equals(black))
-    self.assertTrue(pattern.pattern_at(Point(-1, 0, 0)).equals(black))
-    self.assertTrue(pattern.pattern_at(Point(-1.1, 0, 0)).equals(white))
+    pattern = StripePattern(self.white, self.black)
+    self.assertTrue(pattern.ca.equals(self.white))
+    self.assertTrue(pattern.cb.equals(self.black))
+    self.assertTrue(pattern.pattern_at(Point(0, 0, 0)).equals(self.white))
+    self.assertTrue(pattern.pattern_at(Point(0, 1, 0)).equals(self.white))
+    self.assertTrue(pattern.pattern_at(Point(0, 2, 0)).equals(self.white))
+    self.assertTrue(pattern.pattern_at(Point(0, 0, 1)).equals(self.white))
+    self.assertTrue(pattern.pattern_at(Point(0, 0, 2)).equals(self.white))
+    self.assertTrue(pattern.pattern_at(Point(0.9, 0, 0)).equals(self.white))
+    self.assertTrue(pattern.pattern_at(Point(1, 0, 0)).equals(self.black))
+    self.assertTrue(pattern.pattern_at(Point(-0.1, 0, 0)).equals(self.black))
+    self.assertTrue(pattern.pattern_at(Point(-1, 0, 0)).equals(self.black))
+    self.assertTrue(pattern.pattern_at(Point(-1.1, 0, 0)).equals(self.white))
+
+  def test_gradient_pattern(self):
+    pattern = GradientPattern(self.white, self.black)
+    self.assertTrue(pattern.pattern_at(Point(0, 0, 0)).equals(self.white))
+    self.assertTrue(pattern.pattern_at(Point(0.25, 0, 0)).equals(Color(0.75, 0.75, 0.75)))
+    self.assertTrue(pattern.pattern_at(Point(0.5, 0, 0)).equals(Color(0.5, 0.5, 0.5)))
+    self.assertTrue(pattern.pattern_at(Point(0.75, 0, 0)).equals(Color(0.25, 0.25, 0.25)))
