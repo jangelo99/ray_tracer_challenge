@@ -8,6 +8,8 @@ from tuple import Point
 from utils import EPSILON
 
 
+DEFAULT_REMAINING = 4
+
 class Intersection:
   def __init__(self, t, shape):
     self.t = t
@@ -130,19 +132,19 @@ class World:
     else:
       return False
 
-  def shade_hit(self, comps):
+  def shade_hit(self, comps, remaining=DEFAULT_REMAINING):
     shadowed = self.is_shadowed(comps.over_point)
     surface = self.light.lighting_at(comps.shape.material, comps.over_point,
                                      comps.eyev, comps.normalv, shadowed, comps.shape)
-    reflected = self.reflected_color(comps)
+    reflected = self.reflected_color(comps, remaining)
     return surface.add(reflected)
 
-  def color_at(self, ray):
+  def color_at(self, ray, remaining=DEFAULT_REMAINING):
     self.intersect(ray)
     hit = ray.hit()
     if hit:
       comps = hit.prepare_computations(ray)
-      return self.shade_hit(comps)
+      return self.shade_hit(comps, remaining)
     else:
       return Color(0.0, 0.0, 0.0)
 
@@ -157,12 +159,12 @@ class World:
                           [0.0, 0.0, 0.0, 1.0]])
     return orientation * Translation_Matrix(-1*from_p.x, -1*from_p.y, -1*from_p.z)
 
-  def reflected_color(self, comps):
-    if comps.shape.material.reflective == 0:
+  def reflected_color(self, comps, remaining):
+    if remaining <= 0 or comps.shape.material.reflective == 0:
       return Color(0, 0, 0)
 
     reflect_ray = Ray(comps.over_point, comps.reflectv)
-    color = self.color_at(reflect_ray)
+    color = self.color_at(reflect_ray, remaining - 1)
     return color.scalar_multiply(comps.shape.material.reflective)
 
   @staticmethod

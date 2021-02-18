@@ -296,7 +296,7 @@ class RayTracerTestCase(unittest.TestCase):
     shape.material.ambient = 1
     i = Intersection(1, shape)
     comps = i.prepare_computations(r)
-    color = w.reflected_color(comps)
+    color = w.reflected_color(comps, 4)
     self.assertTrue(color.equals(Color(0, 0, 0)))
     # reflected color for reflective material
     w = World.default_world()
@@ -307,7 +307,7 @@ class RayTracerTestCase(unittest.TestCase):
     r = Ray(Point(0, 0, -3), Vector(0, -math.sqrt(2.0)/2.0, math.sqrt(2.0)/2.0))
     i = Intersection(math.sqrt(2.0), shape)
     comps = i.prepare_computations(r)
-    color = w.reflected_color(comps)
+    color = w.reflected_color(comps, 4)
     self.assertTrue(color.equals(Color(0.19033, 0.23792, 0.14275)))
     # call shade_hit directly
     color = w.shade_hit(comps)

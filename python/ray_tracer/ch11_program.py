@@ -4,6 +4,7 @@ from canvas import Canvas, Color
 from matrix import Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Translation_Matrix
 from ray_tracer import Camera, PointLight, World
 from shape import Material, Plane, Sphere
+from pattern import CheckerPattern
 from tuple import Point, Vector
 
 if __name__ == '__main__':
@@ -14,23 +15,27 @@ if __name__ == '__main__':
   # create plane objects for floor and wall
   floor = Plane()
   floor.material = Material()
-  floor.material.color = Color(1, 0.9, 0.9)
+#  floor.material.color = Color(1, 0.9, 0.9)
+  floor.material.pattern = CheckerPattern(Color(1, 1, 1), Color(0, 0, 0))
   floor.material.specular = 0
-  floor.material.reflective = 0.5
+  floor.material.reflective = 0.2
   world.add_shape(floor)
   
-  wall = Plane()
-  wall.transform = Translation_Matrix(0, 0, 3) * Rotation_Matrix(Rotation_Axis.X, 90)
-  wall.material = floor.material
-  world.add_shape(wall)
+#  wall = Plane()
+#  wall.transform = Translation_Matrix(0, 0, 3) * Rotation_Matrix(Rotation_Axis.X, 90)
+#  wall.material = Material()
+#  wall.material.color = Color(1, 0.9, 0.9)
+#  world.add_shape(wall)
 
   # create sphere objects for scene
   middle_s = Sphere()
   middle_s.transform = Translation_Matrix(-0.5, 1, 0.5)
   middle_s.material = Material()
-  middle_s.material.color = Color(0.1, 1, 0.5)
-  middle_s.material.diffuse = 0.7
-  middle_s.material.specular = 0.3
+  middle_s.material.color = Color(0.373, 0.404, 0.550)
+  middle_s.material.diffuse = 0.0
+  middle_s.material.diffuse = 0.2
+  middle_s.material.specular = 1.0
+  middle_s.material.reflective = 0.7
   world.add_shape(middle_s)
 
   right_s = Sphere()
