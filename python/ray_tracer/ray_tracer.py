@@ -40,6 +40,7 @@ class Computations:
     else:
       self.inside = False
     self.over_point = self.point.add(self.normalv.scalar_multiply(EPSILON))
+    self.reflectv = ray.direction.reflect(self.normalv)
 
 
 class Ray:
@@ -131,8 +132,10 @@ class World:
 
   def shade_hit(self, comps):
     shadowed = self.is_shadowed(comps.over_point)
-    return self.light.lighting_at(comps.shape.material, comps.point, comps.eyev,
-                                  comps.normalv, shadowed, comps.shape)
+    surface = self.light.lighting_at(comps.shape.material, comps.over_point,
+                                     comps.eyev, comps.normalv, shadowed, comps.shape)
+    reflected = self.reflected_color(comps)
+    return surface.add(reflected)
 
   def color_at(self, ray):
     self.intersect(ray)
@@ -153,6 +156,14 @@ class World:
                           [-1*forward.x, -1*forward.y, -1*forward.z, 0.0],
                           [0.0, 0.0, 0.0, 1.0]])
     return orientation * Translation_Matrix(-1*from_p.x, -1*from_p.y, -1*from_p.z)
+
+  def reflected_color(self, comps):
+    if comps.shape.material.reflective == 0:
+      return Color(0, 0, 0)
+
+    reflect_ray = Ray(comps.over_point, comps.reflectv)
+    color = self.color_at(reflect_ray)
+    return color.scalar_multiply(comps.shape.material.reflective)
 
   @staticmethod
   def default_world():

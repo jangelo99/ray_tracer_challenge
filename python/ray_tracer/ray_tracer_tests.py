@@ -4,7 +4,7 @@ import unittest
 from canvas import Color
 from matrix import Matrix, Identity_Matrix, Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Translation_Matrix
 from ray_tracer import Camera, Intersection, PointLight, Ray, World
-from shape import Material, Sphere
+from shape import Material, Plane, Sphere
 from tuple import Point, Vector
 from utils import float_equal, EPSILON
 
@@ -280,3 +280,35 @@ class RayTracerTestCase(unittest.TestCase):
     self.assertEqual(w.is_shadowed(p), False)
     p = Point(-2, 2, -2)
     self.assertEqual(w.is_shadowed(p), False)
+
+  def test_reflection_vector(self):
+    shape = Plane()
+    r = Ray(Point(0, 1, -1), Vector(0, -math.sqrt(2.0)/2.0, math.sqrt(2.0)/2.0))
+    i = Intersection(math.sqrt(2.0), shape)
+    comps = i.prepare_computations(r)
+    self.assertTrue(comps.reflectv.equals(Vector(0, math.sqrt(2.0)/2.0, math.sqrt(2.0)/2.0)))
+
+  def test_reflected_color(self):
+    # reflected color for non-reflective material
+    w = World.default_world()
+    r = Ray(Point(0, 0, 0), Vector(0, 0, 1))
+    shape = w.shapes[1]
+    shape.material.ambient = 1
+    i = Intersection(1, shape)
+    comps = i.prepare_computations(r)
+    color = w.reflected_color(comps)
+    self.assertTrue(color.equals(Color(0, 0, 0)))
+    # reflected color for reflective material
+    w = World.default_world()
+    shape = Plane()
+    shape.material.reflective = 0.5
+    shape.transform = Translation_Matrix(0, -1, 0)
+    w.add_shape(shape)
+    r = Ray(Point(0, 0, -3), Vector(0, -math.sqrt(2.0)/2.0, math.sqrt(2.0)/2.0))
+    i = Intersection(math.sqrt(2.0), shape)
+    comps = i.prepare_computations(r)
+    color = w.reflected_color(comps)
+    self.assertTrue(color.equals(Color(0.19033, 0.23792, 0.14275)))
+    # call shade_hit directly
+    color = w.shade_hit(comps)
+    self.assertTrue(color.equals(Color(0.87676, 0.92434, 0.82917)))

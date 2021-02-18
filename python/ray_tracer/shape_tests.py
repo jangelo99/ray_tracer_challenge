@@ -71,6 +71,7 @@ class ShapeTestCase(unittest.TestCase):
     self.assertEqual(m.diffuse, 0.9)
     self.assertEqual(m.specular, 0.9)
     self.assertEqual(m.shininess, 200.0)
+    self.assertEqual(m.reflective, 0.0)
 
   def test_sphere_material(self):
     s = Sphere()
