@@ -72,6 +72,8 @@ class ShapeTestCase(unittest.TestCase):
     self.assertEqual(m.specular, 0.9)
     self.assertEqual(m.shininess, 200.0)
     self.assertEqual(m.reflective, 0.0)
+    self.assertEqual(m.transparency, 0.0)
+    self.assertEqual(m.refractive_index, 1.0)
 
   def test_sphere_material(self):
     s = Sphere()
@@ -142,3 +144,8 @@ class ShapeTestCase(unittest.TestCase):
     xs = plane.intersect(r)
     self.assertEqual(len(xs), 1)
     self.assertEqual(xs[0], 1)
+
+  def test_glass_sphere(self):
+    s = Sphere.glass_sphere()
+    self.assertEqual(s.material.transparency, 1.0)
+    self.assertEqual(s.material.refractive_index, 1.5)

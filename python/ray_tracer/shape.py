@@ -11,19 +11,25 @@ from utils import EPSILON, float_equal
 class Material:
   def __init__(self):
     self.color = Color(1.0, 1.0, 1.0)
+    self.pattern = None
     self.ambient = 0.1
     self.diffuse = 0.9
     self.specular = 0.9
     self.shininess = 200.0
-    self.pattern = None
     self.reflective = 0.0
+    self.transparency = 0.0
+    self.refractive_index = 1.0
 
   def equals(self, material):
     if self.color.equals(material.color) \
+    and self.pattern == material.pattern \
     and float_equal(self.ambient, material.ambient) \
     and float_equal(self.diffuse, material.diffuse) \
     and float_equal(self.specular, material.specular) \
-    and float_equal(self.shininess, material.shininess):
+    and float_equal(self.shininess, material.shininess) \
+    and float_equal(self.reflective, material.reflective) \
+    and float_equal(self.transparency, material.transparency) \
+    and float_equal(self.refractive_index, material.refractive_index):
       return True
     else:
       return False
@@ -77,6 +83,13 @@ class Sphere(Shape):
       t1 = (-1.0 * b - math.sqrt(discrim)) / (2 * a)
       t2 = (-1.0 * b + math.sqrt(discrim)) / (2 * a)
       return [t1, t2]
+
+  @staticmethod
+  def glass_sphere():
+    s = Sphere()
+    s.material.transparency = 1.0
+    s.material.refractive_index = 1.5
+    return s
 
 
 class Plane(Shape):
