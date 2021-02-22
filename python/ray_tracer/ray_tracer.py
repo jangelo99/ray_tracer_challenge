@@ -43,6 +43,24 @@ class Computations:
       self.inside = False
     self.over_point = self.point.add(self.normalv.scalar_multiply(EPSILON))
     self.reflectv = ray.direction.reflect(self.normalv)
+    # set refractive index for exiting/entering shapes
+    containers = []
+    for i in ray.intersections:
+      if i == intersection:
+        if not containers:
+          self.n1 = 1.0
+        else:
+          self.n1 = containers[-1].material.refractive_index
+      if i.shape in containers:
+        containers.remove(i.shape)
+      else:
+        containers.append(i.shape)
+      if i == intersection:
+        if not containers:
+          self.n2 = 1.0
+        else:
+          self.n2 = containers[-1].material.refractive_index
+        break
 
 
 class Ray:

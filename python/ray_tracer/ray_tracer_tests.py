@@ -312,3 +312,35 @@ class RayTracerTestCase(unittest.TestCase):
     # call shade_hit directly
     color = w.shade_hit(comps)
     self.assertTrue(color.equals(Color(0.87676, 0.92434, 0.82917)))
+
+  def test_find_n1_n2(self):
+    A = Sphere.glass_sphere()
+    A.set_transform(Scaling_Matrix(2, 2, 2))
+    A.material.refractive_index = 1.5
+    B = Sphere.glass_sphere()
+    B.set_transform(Translation_Matrix(0, 0, -0.25))
+    B.material.refractive_index = 2.0
+    C = Sphere.glass_sphere()
+    C.set_transform(Translation_Matrix(0, 0, 0.25))
+    C.material.refractive_index = 2.5
+    r = Ray(Point(0, 0, -4), Vector(0, 0, 1))
+    xs = [Intersection(2, A), Intersection(2.75, B), Intersection(3.25, C), Intersection(4.75, B), Intersection(5.25, C), Intersection(6, A)]
+    r.intersections = xs
+    comps = xs[0].prepare_computations(r)
+    self.assertEqual(comps.n1, 1.0)
+    self.assertEqual(comps.n2, 1.5)
+    comps = xs[1].prepare_computations(r)
+    self.assertEqual(comps.n1, 1.5)
+    self.assertEqual(comps.n2, 2.0)
+    comps = xs[2].prepare_computations(r)
+    self.assertEqual(comps.n1, 2.0)
+    self.assertEqual(comps.n2, 2.5)
+    comps = xs[3].prepare_computations(r)
+    self.assertEqual(comps.n1, 2.5)
+    self.assertEqual(comps.n2, 2.5)
+    comps = xs[4].prepare_computations(r)
+    self.assertEqual(comps.n1, 2.5)
+    self.assertEqual(comps.n2, 1.5)
+    comps = xs[5].prepare_computations(r)
+    self.assertEqual(comps.n1, 1.5)
+    self.assertEqual(comps.n2, 1.0)
