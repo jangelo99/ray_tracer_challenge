@@ -42,6 +42,7 @@ class Computations:
     else:
       self.inside = False
     self.over_point = self.point.add(self.normalv.scalar_multiply(EPSILON))
+    self.under_point = self.point.subtract(self.normalv.scalar_multiply(EPSILON))
     self.reflectv = ray.direction.reflect(self.normalv)
     # set refractive index for exiting/entering shapes
     containers = []
@@ -184,6 +185,22 @@ class World:
     reflect_ray = Ray(comps.over_point, comps.reflectv)
     color = self.color_at(reflect_ray, remaining - 1)
     return color.scalar_multiply(comps.shape.material.reflective)
+
+  def refracted_color(self, comps, remaining):
+    if remaining <= 0 or comps.shape.material.transparency == 0:
+      return Color(0, 0, 0)
+
+    n_ratio = comps.n1 / comps.n2
+    cos_i = comps.eyev.dot(comps.normalv)
+    sin2_t = n_ratio**2 * (1.0 - cos_i**2)
+    if sin2_t > 1.0:
+      return Color(0, 0, 0)
+
+    cos_t = math.sqrt(1.0 - sin2_t)
+    direction = comps.normalv.scalar_multiply(n_ratio * cos_i - cos_t).subtract(comps.eyev.scalar_multiply(n_ratio))
+    refract_ray = Ray(comps.under_point, direction)
+    color = self.color_at(refract_ray, remaining - 1)
+    return color.scalar_multiply(comps.shape.material.transparency)
 
   @staticmethod
   def default_world():

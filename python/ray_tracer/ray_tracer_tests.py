@@ -3,6 +3,7 @@ import unittest
 
 from canvas import Color
 from matrix import Matrix, Identity_Matrix, Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Translation_Matrix
+from pattern import TestPattern
 from ray_tracer import Camera, Intersection, PointLight, Ray, World
 from shape import Material, Plane, Sphere
 from tuple import Point, Vector
@@ -163,6 +164,13 @@ class RayTracerTestCase(unittest.TestCase):
     i = Intersection(5, shape)
     comps = i.prepare_computations(r)
     self.assertTrue(comps.over_point.z < -1.0 * (EPSILON / 2.0))
+    # test case for under_point attribute
+    r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    shape = Sphere.glass_sphere()
+    shape.transform = Translation_Matrix(0, 0, 1)
+    i = Intersection(5, shape)
+    comps = i.prepare_computations(r)
+    self.assertTrue(comps.under_point.z > EPSILON / 2.0)
 
   def test_world_shade_hit(self):
     w = World.default_world()
@@ -344,3 +352,51 @@ class RayTracerTestCase(unittest.TestCase):
     comps = xs[5].prepare_computations(r)
     self.assertEqual(comps.n1, 1.5)
     self.assertEqual(comps.n2, 1.0)
+
+  def test_refracted_color(self):
+    # refracted color for an opaque material
+    w = World.default_world()
+    shape = w.shapes[0]
+    r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    xs = [Intersection(4, shape), Intersection(6, shape)]
+    r.intersections = xs
+    comps = xs[0].prepare_computations(r)
+    color = w.refracted_color(comps, 5)
+    self.assertTrue(color.equals(Color(0, 0, 0)))
+    # refracted color at max recursive depth
+    w = World.default_world()
+    shape = w.shapes[0]
+    shape.material.transparency = 1.0
+    shape.material.refractive_index = 1.5
+    r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    xs = [Intersection(4, shape), Intersection(6, shape)]
+    r.intersections = xs
+    comps = xs[0].prepare_computations(r)
+    color = w.refracted_color(comps, 0)
+    self.assertTrue(color.equals(Color(0, 0, 0)))
+    # refracted color under total internal reflection
+    w = World.default_world()
+    shape = w.shapes[0]
+    shape.material.transparency = 1.0
+    shape.material.refractive_index = 1.5
+    r = Ray(Point(0, 0, math.sqrt(2.0)/2.0), Vector(0, 1, 0))
+    xs = [Intersection(-1.0 * math.sqrt(2.0)/2.0, shape), Intersection(math.sqrt(2.0)/2.0, shape)]
+    r.intersections = xs
+    comps = xs[1].prepare_computations(r)
+    color = w.refracted_color(comps, 5)
+    self.assertTrue(color.equals(Color(0, 0, 0)))
+    # refracted color in all other cases
+    w = World.default_world()
+    A = w.shapes[0]
+    A.material.ambient = 1.0
+    A.material.pattern = TestPattern()
+    B = w.shapes[1]
+    B.material.transparency = 1.0
+    B.material.refractive_index = 1.5
+    r = Ray(Point(0, 0, 0.1), Vector(0, 1, 0))
+    xs = [Intersection(-0.9899, A), Intersection(-0.4899, B), Intersection(0.4899, B), Intersection(0.9899, A)]
+    r.intersections = xs
+    comps = xs[2].prepare_computations(r)
+    color = w.refracted_color(comps, 5)
+    print("%f,%f,%f" % (color.r, color.g, color.b))
+    self.assertTrue(color.equals(Color(0, 0.99888, 0.04722)))
