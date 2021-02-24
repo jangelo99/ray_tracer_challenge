@@ -44,14 +44,24 @@ if __name__ == '__main__':
   right_s.material.color = Color(0.5, 1, 0.1)
   right_s.material.diffuse = 0.7
   right_s.material.specular = 0.3
+#  right_s.material.ambient = 0.0
+#  right_s.material.diffuse = 0.2
+#  right_s.material.specular = 1.0
+#  right_s.material.reflective = 0.7
+#  right_s.material.transparent = 1.0
+#  right_s.material.refractive_index = 1.52
   world.add_shape(right_s)
 
   left_s = Sphere()
   left_s.transform = Translation_Matrix(-1.5, 0.33, -0.75) * Scaling_Matrix(0.33, 0.33, 0.33)
   left_s.material = Material()
-  left_s.material.color = Color(1, 0.8, 0.1)
-  left_s.material.diffuse = 0.7
-  left_s.material.specular = 0.3
+  left_s.material.color = Color(0.3, 0.7, 0.3)
+  left_s.material.ambient = 0.1
+  left_s.material.diffuse = 0.2
+  left_s.material.specular = 1.0
+  left_s.material.reflective = 0.1
+  left_s.material.transparent = 1.0
+  left_s.material.refractive_index = 1.52
   world.add_shape(left_s)
 
   # add a camera and render the scene

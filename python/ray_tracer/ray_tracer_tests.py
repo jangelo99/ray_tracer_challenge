@@ -398,5 +398,22 @@ class RayTracerTestCase(unittest.TestCase):
     r.intersections = xs
     comps = xs[2].prepare_computations(r)
     color = w.refracted_color(comps, 5)
-    print("%f,%f,%f" % (color.r, color.g, color.b))
     self.assertTrue(color.equals(Color(0, 0.99888, 0.04722)))
+    # call shade_hit directly
+    w = World.default_world()
+    floor = Plane()
+    floor.transform = Translation_Matrix(0, -1, 0)
+    floor.material.transparency = 0.5
+    floor.material.refractive_index = 1.5
+    w.add_shape(floor)
+    ball = Sphere()
+    ball.material.color = Color(1, 0, 0)
+    ball.material.ambient = 0.5
+    ball.transform = Translation_Matrix(0, -3.5, -0.5)
+    w.add_shape(ball)
+    r = Ray(Point(0, 0, -3), Vector(0, -1.0*math.sqrt(2.0)/2.0, math.sqrt(2.0)/2.0))
+    xs = [Intersection(math.sqrt(2.0), floor)]
+    r.intersections = xs
+    comps = xs[0].prepare_computations(r)
+    color = w.shade_hit(comps, 5)
+    self.assertTrue(color.equals(Color(0.93642, 0.68642, 0.68642)))

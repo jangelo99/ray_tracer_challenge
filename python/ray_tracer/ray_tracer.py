@@ -156,7 +156,8 @@ class World:
     surface = self.light.lighting_at(comps.shape.material, comps.over_point,
                                      comps.eyev, comps.normalv, shadowed, comps.shape)
     reflected = self.reflected_color(comps, remaining)
-    return surface.add(reflected)
+    refracted = self.refracted_color(comps, remaining)
+    return surface.add(reflected).add(refracted)
 
   def color_at(self, ray, remaining=DEFAULT_REMAINING):
     self.intersect(ray)
