@@ -403,6 +403,7 @@ class RayTracerTestCase(unittest.TestCase):
     w = World.default_world()
     floor = Plane()
     floor.transform = Translation_Matrix(0, -1, 0)
+    floor.material.reflective = 0.5
     floor.material.transparency = 0.5
     floor.material.refractive_index = 1.5
     w.add_shape(floor)
@@ -416,4 +417,25 @@ class RayTracerTestCase(unittest.TestCase):
     r.intersections = xs
     comps = xs[0].prepare_computations(r)
     color = w.shade_hit(comps, 5)
-    self.assertTrue(color.equals(Color(0.93642, 0.68642, 0.68642)))
+    self.assertTrue(color.equals(Color(0.93391, 0.69643, 0.69243)))
+
+  def test_comps_schlick(self):
+    shape = Sphere.glass_sphere()
+    r = Ray(Point(0, 0, math.sqrt(2.0)/2.0), Vector(0, 1, 0))
+    xs = [Intersection(-1.0 * math.sqrt(2.0)/2.0, shape), Intersection(math.sqrt(2.0)/2.0, shape)]
+    r.intersections = xs
+    comps = xs[1].prepare_computations(r)
+    reflectance = comps.schlick()
+    self.assertEqual(reflectance, 1.0)
+    r = Ray(Point(0, 0, 0), Vector(0, 1, 0))
+    xs = [Intersection(-1, shape), Intersection(1, shape)]
+    r.intersections = xs
+    comps = xs[1].prepare_computations(r)
+    reflectance = comps.schlick()
+    self.assertTrue(float_equal(reflectance, 0.04))
+    r = Ray(Point(0, 0.99, -2), Vector(0, 0, 1))
+    xs = [Intersection(1.8589, shape)]
+    r.intersections = xs
+    comps = xs[0].prepare_computations(r)
+    reflectance = comps.schlick()
+    self.assertTrue(float_equal(reflectance, 0.48873))

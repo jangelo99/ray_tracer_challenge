@@ -63,6 +63,19 @@ class Computations:
           self.n2 = containers[-1].material.refractive_index
         break
 
+  def schlick(self):
+    cos_i = self.eyev.dot(self.normalv)
+    if self.n1 > self.n2:
+      n_ratio = self.n1 / self.n2
+      sin2_t = n_ratio**2 * (1.0 - cos_i**2)
+      if sin2_t > 1.0:
+        return 1.0
+      cos_t = math.sqrt(1.0 - sin2_t)
+      cos_i = cos_t
+
+    r0 = ((self.n1 - self.n2) / (self.n1 + self.n2))**2
+    return r0 + (1.0 - r0) * (1 - cos_i)**5
+
 
 class Ray:
   def __init__(self, origin, direction):
@@ -157,7 +170,14 @@ class World:
                                      comps.eyev, comps.normalv, shadowed, comps.shape)
     reflected = self.reflected_color(comps, remaining)
     refracted = self.refracted_color(comps, remaining)
-    return surface.add(reflected).add(refracted)
+
+    material = comps.shape.material
+    if material.reflective > 0.0 and material.transparency > 0.0:
+      reflectance = comps.schlick()
+      shade = surface.add(reflected.scalar_multiply(reflectance)).add(refracted.scalar_multiply(1.0 - reflectance))
+    else:
+      shade = surface.add(reflected).add(refracted)
+    return shade
 
   def color_at(self, ray, remaining=DEFAULT_REMAINING):
     self.intersect(ray)

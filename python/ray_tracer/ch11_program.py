@@ -4,7 +4,7 @@ from canvas import Canvas, Color
 from matrix import Rotation_Axis, Rotation_Matrix, Scaling_Matrix, Translation_Matrix
 from ray_tracer import Camera, PointLight, World
 from shape import Material, Plane, Sphere
-from pattern import CheckerPattern
+from pattern import CheckerPattern, StripePattern
 from tuple import Point, Vector
 
 if __name__ == '__main__':
@@ -21,21 +21,24 @@ if __name__ == '__main__':
   floor.material.reflective = 0.3
   world.add_shape(floor)
   
-#  wall = Plane()
-#  wall.transform = Translation_Matrix(0, 0, 3) * Rotation_Matrix(Rotation_Axis.X, 90)
-#  wall.material = Material()
-#  wall.material.color = Color(1, 0.9, 0.9)
-#  world.add_shape(wall)
+  wall = Plane()
+  wall.transform = Translation_Matrix(0, 0, 3) * Rotation_Matrix(Rotation_Axis.X, 90)
+  wall.material = Material()
+  wall.material.specular = 0
+  wall.material.pattern = StripePattern(Color(1, 1, 1), Color(0, 0, 0))
+  world.add_shape(wall)
 
   # create sphere objects for scene
   middle_s = Sphere()
   middle_s.transform = Translation_Matrix(-0.5, 1, 0.5)
   middle_s.material = Material()
   middle_s.material.color = Color(0.7, 0.3, 0.3)
-  middle_s.material.ambient = 0.0
+  middle_s.material.ambient = 0.2
   middle_s.material.diffuse = 0.2
   middle_s.material.specular = 1.0
-  middle_s.material.reflective = 0.7
+  middle_s.material.reflective = 0.5
+  middle_s.material.transparent = 1.0
+  middle_s.material.refractive_index = 1.52
   world.add_shape(middle_s)
 
   right_s = Sphere()
@@ -44,24 +47,14 @@ if __name__ == '__main__':
   right_s.material.color = Color(0.5, 1, 0.1)
   right_s.material.diffuse = 0.7
   right_s.material.specular = 0.3
-#  right_s.material.ambient = 0.0
-#  right_s.material.diffuse = 0.2
-#  right_s.material.specular = 1.0
-#  right_s.material.reflective = 0.7
-#  right_s.material.transparent = 1.0
-#  right_s.material.refractive_index = 1.52
   world.add_shape(right_s)
 
   left_s = Sphere()
   left_s.transform = Translation_Matrix(-1.5, 0.33, -0.75) * Scaling_Matrix(0.33, 0.33, 0.33)
   left_s.material = Material()
   left_s.material.color = Color(0.3, 0.7, 0.3)
-  left_s.material.ambient = 0.1
-  left_s.material.diffuse = 0.2
-  left_s.material.specular = 1.0
-  left_s.material.reflective = 0.1
-  left_s.material.transparent = 1.0
-  left_s.material.refractive_index = 1.52
+  left_s.material.diffuse = 0.7
+  left_s.material.specular = 0.3
   world.add_shape(left_s)
 
   # add a camera and render the scene
