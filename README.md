@@ -4,4 +4,4 @@ To run any of the demo programs, clone/download the repo and execute the followi
   
 `python ch<#>_program`  
   
-where <#> is the relevant chapter number. This will produce an image file named **canvas.ppm** (NOTE: you might need to use GIMP or another image editing program to convert the PPM file to an image format your system can display).
+where <#> is the relevant chapter number. This will produce an image file named **canvas.ppm** (NOTE: you might need to use [GIMP](https://www.gimp.org/) or another image editing program to convert the PPM file to an image format your system can display).
